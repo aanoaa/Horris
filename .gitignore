@@ -1,0 +1,7 @@
+*.bak
+Makefile.old
+ignore.txt
+blib
+pm_to_blib
+inc
+.build
