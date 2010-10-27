@@ -109,3 +109,31 @@ sub run {
 #};
 
 1;
+
+__END__
+
+=head1 NAME
+
+Morris::Connection - Single IRC Connection
+
+=head1 SYNOPSIS
+
+    use Morris::Connection;
+
+    my $conn = Morris::Connection->new(
+        nickname => $nickname,
+        port     => $port_number,
+        password => $optional_password,
+        server   => $server_name,
+        username => $username,
+    );
+
+    # to receive events
+    $conn->register_hook( $hook_name => $code );
+
+    # to send events
+    $conn->irc_notice( { channel => $channel, message => $message } );
+    $conn->irc_privmsg( { channel => $channel, message => $message } );
+    $conn->irc_mode( { channel => $channel, mode => $new_mode, who => $target } );
+
+=cut
