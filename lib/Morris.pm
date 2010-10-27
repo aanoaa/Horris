@@ -22,6 +22,7 @@ has connections => (
 	lazy_build => 1, 
 	handles => {
 		all_connections => 'elements', 
+		push_connection => 'push', 
 	}, 
 );
 
@@ -31,20 +32,19 @@ has config => (
 	required => 1, 
 );
 
-sub _noop_cb {}
 sub _build_condvar { AnyEvent->condvar }
 sub _build_connections {
 	my ($self) = @_;
-	my $config = $self->{config};
 	my @connections;
-	while (my ($name, $conn) = each %{$config->{connection}}) {
+	while (my ($name, $conn) = each %{$self->{config}{connection}}) {
 		confess "No network specified connection '$name'" unless $conn->{network};
 
-		my $network = $config->{network}->{ $conn->{network} };
-		$network->{server} ||= $conn->{network};
-
-		my $connection = Morris::Connection->new(%$network, %$conn, (name => $name));
-		$connection->load_plugins(keys %{ $conn->{plugin} });
+		my $network = $self->{config}{network}->{ $conn->{network} };
+		my $connection = Morris::Connection->new({
+			%$network,
+			%$conn,
+			plugins => [keys %{ $conn->{plugin} }]
+		});
 		push @connections, $connection;
 	}
 
@@ -53,12 +53,13 @@ sub _build_connections {
 
 sub run {
 	my $self = shift;
-	my $config = $self->{config};
 	my $cv = $self->condvar;
 	$cv->begin;
 	foreach my $conn ($self->all_connections) {
-		$conn->run($self->config->{connection}{ $conn->name }{plugin});
+		$conn->run;
 	}
+
+	$cv->recv;
 }
 
 __PACKAGE__->meta->make_immutable;

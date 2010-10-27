@@ -1,7 +1,8 @@
 package Morris::Connection::Plugin::Bar;
-use Moose::Role;
+use Moose;
+with 'MooseX::Role::Pluggable::Plugin';
 
-sub bar {
+sub run {
 	my ($self, $opt) = @_;
 	print __PACKAGE__, " start\n";
 	use Data::Dumper 'Dumper';

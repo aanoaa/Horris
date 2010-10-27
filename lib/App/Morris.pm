@@ -7,7 +7,7 @@ use namespace::clean -except => qw/meta/;
 with qw/MooseX::Getopt MooseX::SimpleConfig/;
 
 has '+configfile' => (
-	default => '/home/hshong/tmp/perl/plug/Morris/misc/sample.conf'
+	default => '/etc/morris.conf'
 );
 
 has config => (
@@ -24,7 +24,6 @@ sub run {
 	my $self = shift;
 	my $morris = Morris->new(config => $self->config);
 	$morris->run;
-	$morris->condvar->recv;
 }
 
 sub config_any_args {
