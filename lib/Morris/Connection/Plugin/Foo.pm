@@ -1,13 +1,20 @@
 package Morris::Connection::Plugin::Foo;
 use Moose;
-with 'MooseX::Role::Pluggable::Plugin';
+with qw/MooseX::Role::Pluggable::Plugin Morris::Connection::Plugin/;
 
-sub run {
+sub init {
 	my ($self, $opt) = @_;
-	print __PACKAGE__, " start\n";
+	print __PACKAGE__, " init\n" if $Morris::DEBUG;
 	use Data::Dumper 'Dumper';
 	print Dumper($opt);
-	print __PACKAGE__, " end\n";
+}
+
+sub run {
+	print __PACKAGE__, " run\n" if $Morris::DEBUG;
+}
+
+sub disconnect {
+	print __PACKAGE__, " disconnect\n" if $Morris::DEBUG;
 }
 
 1;

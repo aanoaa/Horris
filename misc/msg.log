@@ -1,0 +1,16 @@
+#morris-test: $VAR1 = {
+	'params' => [
+		'#morris-test',
+		'오우'
+	],
+	'command' => 'PRIVMSG',
+	'prefix' => 'hshong!~hshong@183.98.2.27'
+};
+#aanoaa: $VAR1 = {
+	'params' => [
+		'#aanoaa',
+		'이렇게 죨라게 긴 한글도 잘되려나? #!@#!'
+	],
+	'command' => 'PRIVMSG',
+	'prefix' => 'hshong!~hshong@183.98.2.27'
+};

@@ -2,6 +2,7 @@ package Morris::Connection;
 use Moose;
 use AnyEvent::IRC::Client;
 use Const::Fast;
+use App::eng2kor;
 use namespace::clean -except => qw/meta/;
 
 with 'MooseX::Role::Pluggable';
@@ -45,6 +46,11 @@ has username => (
 	lazy_build => 1
 );
 
+has channels => (
+	is => 'ro', 
+	isa => 'ArrayRef[Str]', 
+);
+
 has 'plugin' => (
 	traits => ['Hash'], 
 	is => 'ro', 
@@ -59,54 +65,59 @@ sub _build_username { $_[0]->nickname }
 sub run {
 	my $self = shift;
 	foreach my $plugin (@{ $self->plugin_list }) {
-		if ($plugin->can('run')) {
-			$plugin->run( $self->get_args($plugin->name) ); # $plugin->{parent} == $self
-		}
+		$plugin->init( $self->get_args($plugin->name) );
 	}
 
-#	my $irc = AnyEvent::IRC::Client->new();
-#	$self->irc($irc);
-#	$irc->connect( $self->server, $self->port, {
-#			nick => $self->nickname,
-#			user => $self->username,
-#			password => $self->password,
-#			timeout => 1,
-#	} );
-#	$irc->reg_cb(
-#		connect     => sub {
-#			warn "connected to: ". $self->server . ":" . $self->port;
-#			$self->call_hook( 'server.connected', @_ )
-#		},
-#		disconnect  => sub { $self->call_hook( 'server.disconnect', @_ ) },
-#		irc_privmsg => sub { 
-#			my ($nick, $raw) = @_;
-#			my $message = Morris::Message->new(
-#				channel => $raw->{params}->[0],
-#				message => $raw->{params}->[1],
-#				from    => $raw->{prefix},
-#			);
-#			$self->call_hook( 'chat.privmsg', $message )
-#		},
-#		#
-#		# XXX - we want the /full/ details of this user, not his nick
-#		#       so we override the original irc_join callback
-#		irc_join => sub { 
-#			my $object = shift;
-#			$object->AnyEvent::IRC::Client::join_cb(@_);
-#			# and /THEN/ call our callback
-#			# fix the param thing to be just a simple 'channel' parameter
-#			my $channel = $_[0]->{params}->[0];
-#			my $addr    = Morris::Message::Address->new( $_[0]->{prefix} );
-#			$self->call_hook( 'channel.joined', $channel, $addr );
-#		},
-#		registered  => sub { $self->call_hook( 'server.registered', @_ ) },
-#	);
-}
+	my $irc = AnyEvent::IRC::Client->new();
+	$self->irc($irc);
 
-#around BUILDARGS => sub {
-#	use Data::Dumper 'Dumper';
-#	print Dumper(@_);
-#};
+	$irc->reg_cb(disconnect => sub {
+		foreach my $plugin (@{ $self->plugin_list }) {
+			$plugin->disconnect;
+		}
+
+		$irc->connect($self->server, $self->port, {
+			nick => $self->nickname,
+			user => $self->username,
+			password => $self->password,
+			timeout => 1,
+		});
+	});
+
+	$irc->reg_cb(connect => sub {
+		my ($con, $err) = @_;
+		if (defined $err) {
+			warn "connect error: $err\n";
+			return;
+		}
+
+		warn "connected to: " . $self->server . ":" . $self->port if $Morris::DEBUG;
+		$irc->send_srv(JOIN => $_) for @{ $self->channels }
+	});
+
+	$irc->reg_cb(publicmsg => sub {
+		my ($con, $channel, $ircmsg) = @_;
+		my $msg = $ircmsg->{params}[1];
+		if ($msg =~ m/^hongbot/) {
+			#$con->disconnect('done') if ($msg =~ m/껒여/ or $msg =~ m/꺼져/);
+			my ($command, $raw_args) = $msg =~ m/^hongbot[^ ]*[ ]+(\w+)[ ]+(.*)$/;
+			print $raw_args, "\n";
+			foreach my $plugin (@{ $self->plugin_list }) {
+				$plugin->can($command);
+				my $rt = $plugin->$command(split(/ /, $raw_args));
+				print "RT: $rt\n";
+				#$irc->send_srv( PRIVMSG => 'hshong', $
+			}
+		}
+	});
+
+	$irc->connect($self->server, $self->port, {
+		nick => $self->nickname,
+		user => $self->username,
+		password => $self->password,
+		timeout => 1,
+	});
+}
 
 1;
 

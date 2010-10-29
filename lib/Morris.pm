@@ -8,7 +8,7 @@ use namespace::clean -except => qw/meta/;
 our $VERSION = '0.0.1';
 $VERSION = eval $VERSION;
 
-const my $DEBUG => $ENV{PERL_MORRIS_DEBUG};
+const our $DEBUG => $ENV{PERL_MORRIS_DEBUG};
 
 has condvar => (
 	is => 'ro', 
