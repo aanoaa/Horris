@@ -1,34 +1,17 @@
 package Morris::Connection::Plugin::Bar;
 use Moose;
-use Getopt::Long;
-use IO::String;
-use Pod::Text;
-with qw/MooseX::Role::Pluggable::Plugin Morris::Connection::Plugin/;
+extends 'Morris::Connection::Plugin';
+with 'MooseX::Role::Pluggable::Plugin';
 
-sub init {
-	my $self = shift;
-}
+sub irc_privmsg {
+	my ($self, $msg) = @_;
+	# echo
+	$self->connection->irc_privmsg({
+		channel => $msg->channel, 
+		message => '> ' . $msg->message
+	});
 
-sub bar {
-	my $self = shift;
-	local @ARGV = @_;
-
-	print join(", ", @ARGV), "\n";
-
-	my %options;
-	GetOptions(\%options, "--help");
-	if ($options{help}) {
-		print "in help\n";
-		my $buffer;
-		my $io = IO::String->new($buffer);
-		my $p2t = Pod::Text->new;
-		$p2t->parse_from_file(__PACKAGE__, $io);
-		return $buffer;
-	}
-	print " ... \n";
-}
-
-sub disconnect {
+	# help
 }
 
 1;

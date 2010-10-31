@@ -1,9 +1,29 @@
 package Morris::Connection::Plugin;
-use Moose::Role;
+use Moose;
+use namespace::clean -except => qw/meta/;
 
-requires qw/init disconnect/;
+has connection => (
+	is => 'ro', 
+	isa => 'Morris::Connection', 
+	writer => '_connection', 
+);
 
-no Moose::Role;
+sub init {
+	my ($self, $conn) = @_;
+	$self->_connection($conn);
+	print __PACKAGE__ . " init\n";
+}
+
+sub disconnect {
+	print __PACKAGE__ . " disconnect\n";
+}
+
+sub help {
+	return '';
+}
+
+__PACKAGE__->meta->make_immutable;
+
 1;
 
 __END__

@@ -2,7 +2,7 @@ package Morris::Connection;
 use Moose;
 use AnyEvent::IRC::Client;
 use Const::Fast;
-use App::eng2kor;
+use Morris::Message;
 use namespace::clean -except => qw/meta/;
 
 with 'MooseX::Role::Pluggable';
@@ -65,7 +65,7 @@ sub _build_username { $_[0]->nickname }
 sub run {
 	my $self = shift;
 	foreach my $plugin (@{ $self->plugin_list }) {
-		$plugin->init( $self->get_args($plugin->name) );
+		$plugin->init( $self, $self->get_args($plugin->name) );
 	}
 
 	my $irc = AnyEvent::IRC::Client->new();
@@ -75,13 +75,6 @@ sub run {
 		foreach my $plugin (@{ $self->plugin_list }) {
 			$plugin->disconnect;
 		}
-
-		$irc->connect($self->server, $self->port, {
-			nick => $self->nickname,
-			user => $self->username,
-			password => $self->password,
-			timeout => 1,
-		});
 	});
 
 	$irc->reg_cb(connect => sub {
@@ -95,19 +88,16 @@ sub run {
 		$irc->send_srv(JOIN => $_) for @{ $self->channels }
 	});
 
-	$irc->reg_cb(publicmsg => sub {
-		my ($con, $channel, $ircmsg) = @_;
-		my $msg = $ircmsg->{params}[1];
-		if ($msg =~ m/^hongbot/) {
-			#$con->disconnect('done') if ($msg =~ m/껒여/ or $msg =~ m/꺼져/);
-			my ($command, $raw_args) = $msg =~ m/^hongbot[^ ]*[ ]+(\w+)[ ]+(.*)$/;
-			print $raw_args, "\n";
-			foreach my $plugin (@{ $self->plugin_list }) {
-				$plugin->can($command);
-				my $rt = $plugin->$command(split(/ /, $raw_args));
-				print "RT: $rt\n";
-				#$irc->send_srv( PRIVMSG => 'hshong', $
-			}
+	$irc->reg_cb(irc_privmsg => sub {
+		my ($con, $raw) = @_;
+		my $message = Morris::Message->new(
+			channel => $raw->{params}->[0], 
+			message => $raw->{params}->[1], 
+			from	=> $raw->{prefix}
+		);
+
+		foreach my $plugin (@{ $self->plugin_list }) {
+			$plugin->irc_privmsg($message) if $plugin->can('irc_privmsg') and $message->from->nickname ne $self->nickname;
 		}
 	});
 
@@ -117,6 +107,21 @@ sub run {
 		password => $self->password,
 		timeout => 1,
 	});
+}
+
+sub irc_notice {
+    my ($self, $args) = @_;
+    $self->send_srv(NOTICE => $args->{channel} => $args->{message});
+}
+
+sub irc_privmsg {
+    my ($self, $args) = @_;
+    $self->send_srv(PRIVMSG => $args->{channel} => $args->{message});
+}
+
+sub irc_mode {
+    my ($self, $args) = @_;
+    $self->send_srv(MODE => $args->{channel} => $args->{mode}, $args->{who});
 }
 
 1;
