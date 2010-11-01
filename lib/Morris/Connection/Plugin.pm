@@ -1,5 +1,7 @@
 package Morris::Connection::Plugin;
 use Moose;
+use Pod::Text;
+use IO::String;
 use namespace::clean -except => qw/meta/;
 
 has connection => (
@@ -8,18 +10,34 @@ has connection => (
 	writer => '_connection', 
 );
 
+has is_enable => (
+	is => 'rw', 
+	isa => 'Bool', 
+	default => 1
+);
+
 sub init {
 	my ($self, $conn) = @_;
 	$self->_connection($conn);
-	print __PACKAGE__ . " init\n";
+	print __PACKAGE__ . " init\n" if $Morris::DEBUG;
 }
 
 sub disconnect {
-	print __PACKAGE__ . " disconnect\n";
+	print __PACKAGE__ . " disconnect\n" if $Morris::DEBUG;
+}
+
+sub snippet {
+	my ($snippet) = __PACKAGE__ =~ m/(\w+)$/;
+	return lc $snippet;
 }
 
 sub help {
-	return '';
+	my ($self, $pod) = @_;
+	my $buf;
+	my $io = IO::String->new($buf);
+	my $parser = Pod::Text->new(sentence => 0, width => 78);
+	$parser->parse_from_file($pod, $io);
+	return split("\n", $buf);
 }
 
 __PACKAGE__->meta->make_immutable;

@@ -3,10 +3,19 @@ use Moose;
 extends 'Morris::Connection::Plugin';
 with 'MooseX::Role::Pluggable::Plugin';
 
+sub snippet {
+	return "restart";
+}
+
 sub irc_privmsg {
-	my ($self, $msg) = @_;
-	my $message = $msg->message;
-	$self->connection->irc->disconnect if $message =~ m/^(restart|reconnect|다시들와)$/;
+	my ($self, $message) = @_;
+	my $msg = $message->message;
+	my $botname = $self->connection->nickname;
+	my ($cmd, $raw_opts_args) = $msg =~ m/^$botname\S*\s+(\w+)\s*(.*)$/;
+	if (defined $cmd) {
+		$self->connection->irc->disconnect if $cmd =~ m/^(restart|reconnect|다시들와)$/i;
+		exit(0) if $cmd =~ m/^(quit|exit|disconnect|꺼져|껒여)$/i;
+	}
 }
 
 sub disconnect {
@@ -31,6 +40,17 @@ Morris::Connection::Plugin::Restart
 
 =head1 SYNOPSIS
 
-	botname bar [--help|-h]
+=head2 RESTART
+
+	botname restart
+	botname reconnect
+	botname 다시들와
+
+=head2 KILL
+
+	botname exit
+	botname disconnect
+	botname 꺼져
+	botname 껒여
 
 =cut

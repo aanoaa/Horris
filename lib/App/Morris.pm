@@ -30,7 +30,7 @@ sub config_any_args {
 	return {
 		driver_args => {
 			General => {
-				-LowerCaseNames => 1
+				-LowerCaseNames => 1, 
 			}
 		}
 	};

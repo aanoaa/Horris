@@ -38,6 +38,7 @@ sub _build_connections {
 	my @connections;
 	while (my ($name, $conn) = each %{$self->{config}{connection}}) {
 		confess "No network specified connection '$name'" unless $conn->{network};
+		print "Connection Name: $name\n" if $Morris::DEBUG;
 
 		my $network = $self->{config}{network}->{ $conn->{network} };
 		my $connection = Morris::Connection->new({
