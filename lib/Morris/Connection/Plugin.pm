@@ -10,11 +10,29 @@ has connection => (
 	writer => '_connection', 
 );
 
+has snippet => (
+	is => 'ro', 
+	isa => 'Str', 
+	lazy_build => 1
+);
+
 has is_enable => (
 	is => 'rw', 
 	isa => 'Bool', 
 	default => 1
 );
+
+has _pod_file => (
+	is => 'ro', 
+	isa => 'Str', 
+	default => __FILE__
+);
+
+sub _build_snippet {
+	my $package = ref $_[0];
+	my ($snippet) = $package =~ m/(\w+)$/;
+	return $snippet;
+}
 
 sub init {
 	my ($self, $conn) = @_;
@@ -26,17 +44,12 @@ sub disconnect {
 	print __PACKAGE__ . " disconnect\n" if $Morris::DEBUG;
 }
 
-sub snippet {
-	my ($snippet) = __PACKAGE__ =~ m/(\w+)$/;
-	return lc $snippet;
-}
-
 sub help {
-	my ($self, $pod) = @_;
+	my ($self) = @_;
 	my $buf;
 	my $io = IO::String->new($buf);
 	my $parser = Pod::Text->new(sentence => 0, width => 78);
-	$parser->parse_from_file($pod, $io);
+	$parser->parse_from_file($self->_pod_file, $io);
 	return split("\n", $buf);
 }
 

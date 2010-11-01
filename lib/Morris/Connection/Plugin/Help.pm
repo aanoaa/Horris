@@ -6,10 +6,6 @@ use IO::Capture::Stderr;
 extends 'Morris::Connection::Plugin';
 with 'MooseX::Role::Pluggable::Plugin';
 
-sub snippet {
-	return "help";
-}
-
 sub irc_privmsg {
 	my ($self, $message) = @_;
 	my $msg = $message->message;
@@ -49,7 +45,7 @@ sub irc_privmsg {
 		return;
 	}
 
-	for my $line ($self->help(__FILE__)) {
+	for my $line ($self->help) {
 		$self->connection->irc_privmsg({
 			channel => $message->channel, 
 			message => $line

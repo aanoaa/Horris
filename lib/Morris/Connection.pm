@@ -75,14 +75,13 @@ sub run {
 	$irc->reg_cb(disconnect => sub {
 		warn 'got callback disconnect' if $Morris::DEBUG;
 		foreach my $plugin (@{ $self->plugin_list }) {
-			print 'plugin ' . $plugin->name . ' disconnect' if $Morris::DEBUG;
+			print 'plugin ' . $plugin->name . " disconnect\n" if $Morris::DEBUG;
 			$plugin->disconnect;
 		}
 	});
 
 	$irc->reg_cb(connect => sub {
 		my ($con, $err) = @_;
-		warn 'got callback connect' if $Morris::DEBUG;
 		if (defined $err) {
 			warn "connect error: $err\n";
 			return;
@@ -94,7 +93,6 @@ sub run {
 
 	$irc->reg_cb(irc_privmsg => sub {
 		my ($con, $raw) = @_;
-		warn 'got callback irc_privmsg' if $Morris::DEBUG;
 		my $message = Morris::Message->new(
 			channel => $raw->{params}->[0], 
 			message => $raw->{params}->[1], 
@@ -108,7 +106,6 @@ sub run {
 		}
 	});
 
-	print 'try to connect ' . $self->server . ':' . $self->port . "\n" if $Morris::DEBUG;
 	$irc->connect($self->server, $self->port, {
 		nick => $self->nickname,
 		user => $self->username,
