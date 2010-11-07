@@ -27,10 +27,12 @@ has help => (
 	lazy_build => 1, 
 );
 
-sub _build_help { return ref $_[0]; } # 현재pod를 사용해서 슥샥
+sub _build_help { ref $_[0] }
 
 sub init {
 	my ($self, $conn) = @_;
+	my $pname = ref $self;
+	print ref $self, " on - ", $self->is_enable ? 'enable' : 'disable', "\n" if $Morris::DEBUG;
 	$self->_connection($conn);
 }
 

@@ -65,7 +65,6 @@ sub _build_username { $_[0]->nickname }
 sub run {
 	my $self = shift;
 	foreach my $plugin (@{ $self->plugin_list }) {
-		print $plugin->name . " init\n" if $Morris::DEBUG;
 		$plugin->init($self);
 	}
 
