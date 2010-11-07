@@ -1,57 +1,52 @@
 package Morris::Connection::Plugin;
 use Moose;
-use Pod::Text;
-use IO::String;
 use namespace::clean -except => qw/meta/;
 
 has connection => (
 	is => 'ro', 
 	isa => 'Morris::Connection', 
-	writer => '_connection', 
-);
-
-has snippet => (
-	is => 'ro', 
-	isa => 'Str', 
-	lazy_build => 1
+	writer => '_connection'
 );
 
 has is_enable => (
+	traits => ['Bool'], 
 	is => 'rw', 
 	isa => 'Bool', 
-	default => 1
+	default => 1, 
+	handles => {
+		enable => 'set', 
+		disable => 'unset', 
+		switch => 'toggle', 
+		is_disable => 'not'
+	}
 );
 
-has _pod_file => (
+has help => (
 	is => 'ro', 
 	isa => 'Str', 
-	default => __FILE__
+	lazy_build => 1, 
 );
 
-sub _build_snippet {
-	my $package = ref $_[0];
-	my ($snippet) = $package =~ m/(\w+)$/;
-	return $snippet;
-}
+sub _build_help { return ref $_[0]; } # 현재pod를 사용해서 슥샥
 
 sub init {
 	my ($self, $conn) = @_;
 	$self->_connection($conn);
-	print __PACKAGE__ . " init\n" if $Morris::DEBUG;
 }
 
-sub disconnect {
-	print __PACKAGE__ . " disconnect\n" if $Morris::DEBUG;
-}
+sub disconnect { }
 
-sub help {
-	my ($self) = @_;
-	my $buf;
-	my $io = IO::String->new($buf);
-	my $parser = Pod::Text->new(sentence => 0, width => 78);
-	$parser->parse_from_file($self->_pod_file, $io);
-	return split("\n", $buf);
-}
+around BUILDARGS => sub {
+	my ($orig, $class, @args) = @_;
+	my $self = $class->$orig(@args);
+	my @reserve_keys = qw/parent name/;
+	while (my ($key, $value) = each %{ $self->{parent}{plugin}{$self->{name}} }) {
+		confess 'keys [' . join(', ', @reserve_keys) . "] are reserved\n" if grep { $key eq $_ } @reserve_keys;
+		$self->{$key} = $value;
+	}
+
+	return $self;
+};
 
 __PACKAGE__->meta->make_immutable;
 
@@ -71,10 +66,6 @@ Morris::Connection::Plugin - require interfaces for plugins
 
 	sub init {
 		# stuff before connect
-	}
-
-	sub run {
-		# all stuff here
 	}
 
 	sub disconnect {

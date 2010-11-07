@@ -65,17 +65,15 @@ sub _build_username { $_[0]->nickname }
 sub run {
 	my $self = shift;
 	foreach my $plugin (@{ $self->plugin_list }) {
-		print 'plugin ' . $plugin->name . " init\n" if $Morris::DEBUG;
-		$plugin->init( $self, $self->get_args($plugin->name) );
+		print $plugin->name . " init\n" if $Morris::DEBUG;
+		$plugin->init($self);
 	}
 
 	my $irc = AnyEvent::IRC::Client->new();
 	$self->irc($irc);
 
 	$irc->reg_cb(disconnect => sub {
-		warn 'got callback disconnect' if $Morris::DEBUG;
 		foreach my $plugin (@{ $self->plugin_list }) {
-			print 'plugin ' . $plugin->name . " disconnect\n" if $Morris::DEBUG;
 			$plugin->disconnect;
 		}
 	});
@@ -99,7 +97,7 @@ sub run {
 			from	=> $raw->{prefix}
 		);
 
-		if ($message->from->nickname ne $self->nickname) {
+		if ($message->from->nickname ne $self->nickname) { # loop guard
 			foreach my $plugin (@{ $self->plugin_list }) {
 				$plugin->irc_privmsg($message) if $plugin->can('irc_privmsg');
 			}
