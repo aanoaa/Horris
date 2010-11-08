@@ -1,9 +1,9 @@
-package Morris::Connection::Plugin::RPC;
+package Horris::Connection::Plugin::RPC;
 use Moose;
 use AnyEvent::MP qw(configure port rcv);
 use AnyEvent::MP::Global qw(grp_reg);
 use namespace::clean -except => qw/meta/;
-extends 'Morris::Connection::Plugin';
+extends 'Horris::Connection::Plugin';
 with 'MooseX::Role::Pluggable::Plugin';
 
 has '+is_enable' => (
@@ -34,7 +34,7 @@ __END__
 
 =head1 NAME
 
-Morris::Connection::Plugin::RPC
+Horris::Connection::Plugin::RPC
 
 =head1 SYNOPSIS
 

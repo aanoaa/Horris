@@ -1,8 +1,8 @@
-package Morris::Connection;
+package Horris::Connection;
 use Moose;
 use AnyEvent::IRC::Client;
 use Const::Fast;
-use Morris::Message;
+use Horris::Message;
 use namespace::clean -except => qw/meta/;
 
 with 'MooseX::Role::Pluggable';
@@ -84,13 +84,13 @@ sub run {
 			return;
 		}
 
-		warn "connected to: " . $self->server . ":" . $self->port if $Morris::DEBUG;
+		warn "connected to: " . $self->server . ":" . $self->port if $Horris::DEBUG;
 		$irc->send_srv(JOIN => $_) for @{ $self->channels }
 	});
 
 	$irc->reg_cb(irc_privmsg => sub {
 		my ($con, $raw) = @_;
-		my $message = Morris::Message->new(
+		my $message = Horris::Message->new(
 			channel => $raw->{params}->[0], 
 			message => $raw->{params}->[1], 
 			from	=> $raw->{prefix}
@@ -132,13 +132,13 @@ __END__
 
 =head1 NAME
 
-Morris::Connection - Single IRC Connection
+Horris::Connection - Single IRC Connection
 
 =head1 SYNOPSIS
 
-    use Morris::Connection;
+    use Horris::Connection;
 
-    my $conn = Morris::Connection->new(
+    my $conn = Horris::Connection->new(
         nickname => $nickname,
         port     => $port_number,
         password => $optional_password,
@@ -150,7 +150,7 @@ Morris::Connection - Single IRC Connection
 
 =over
 
-=item 1 Make your own Pluggin. like a C<Morris::Connection::Plugin::Foo>.
+=item 1 Make your own Pluggin. like a L<Horris::Connection::Plugin::Foo>.
 
 =item 2 check the list what you want to implement event.
 
@@ -168,10 +168,10 @@ Morris::Connection - Single IRC Connection
 
 =back
 
-=item 3 implements it
+=item 3 implements
 
 	sub connect {
-		my ($self, $msg) = @_; # $msg is Morris::Message
+		my ($self, $msg) = @_; # $msg is Horris::Message
 		print "connected\n";
 	}
 

@@ -1,10 +1,10 @@
-package Morris::Connection::Plugin;
+package Horris::Connection::Plugin;
 use Moose;
 use namespace::clean -except => qw/meta/;
 
 has connection => (
 	is => 'ro', 
-	isa => 'Morris::Connection', 
+	isa => 'Horris::Connection', 
 	writer => '_connection'
 );
 
@@ -32,7 +32,7 @@ sub _build_help { ref $_[0] }
 sub init {
 	my ($self, $conn) = @_;
 	my $pname = ref $self;
-	print ref $self, " on - ", $self->is_enable ? 'enable' : 'disable', "\n" if $Morris::DEBUG;
+	print ref $self, " on - ", $self->is_enable ? 'enable' : 'disable', "\n" if $Horris::DEBUG;
 	$self->_connection($conn);
 }
 
@@ -58,20 +58,20 @@ __END__
 
 =head1 NAME
 
-Morris::Connection::Plugin - require interfaces for plugins
+Horris::Connection::Plugin - require interfaces for plugins
 
 =head1 SYNOPSIS
 
-    package Morris::Connection::Plugin::Foo;
+    package Horris::Connection::Plugin::Foo;
     use Moose;
-    with qw/Morris::Connection::Plugin MooseX::Role::Pluggable::Plugin/;
+    with qw/Horris::Connection::Plugin MooseX::Role::Pluggable::Plugin/;
 
 	sub init {
 		# stuff before connect
 	}
 
 	sub disconnect {
-		# stuff with disconnect
+		# stuff on disconnect
 	}
 
     # see the documentation for MooseX::Role::Pluggable,

@@ -1,6 +1,6 @@
-package Morris::Connection::Plugin::Echo;
+package Horris::Connection::Plugin::Echo;
 use Moose;
-extends 'Morris::Connection::Plugin';
+extends 'Horris::Connection::Plugin';
 with 'MooseX::Role::Pluggable::Plugin';
 
 has '+is_enable' => (
@@ -38,7 +38,7 @@ __END__
 
 =head1 NAME
 
-Morris::Connection::Plugin::Echo
+Horris::Connection::Plugin::Echo
 
 =head1 SYNOPSIS
 

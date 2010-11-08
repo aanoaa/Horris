@@ -1,18 +1,18 @@
-package Morris::Message;
+package Horris::Message;
 use Moose;
 use Moose::Util::TypeConstraints;
 use namespace::clean -except => qw(meta);
 
-class_type 'Morris::Message::Address';
+class_type 'Horris::Message::Address';
 
-coerce 'Morris::Message::Address'
+coerce 'Horris::Message::Address'
     => from 'Str'
-        => via { Morris::Message::Address->new($_) }
+        => via { Horris::Message::Address->new($_) }
 ;
 
 has from => (
     is => 'ro',
-    isa => 'Morris::Message::Address',
+    isa => 'Horris::Message::Address',
     coerce => 1,
     required => 1,
     handles  => [ qw(modifier nickname username hostname) ]
@@ -36,7 +36,7 @@ has timestamp => (
 
 __PACKAGE__->meta->make_immutable;
 
-package Morris::Message::Address;
+package Horris::Message::Address;
 use Moose;
 
 has str_ref => (

@@ -1,4 +1,4 @@
-package Morris::Test;
+package Horris::Test;
 use strict;
 use IO::Socket::INET;
 use URI;

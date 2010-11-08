@@ -1,9 +1,9 @@
-package Morris::Connection::Plugin::Twitter;
+package Horris::Connection::Plugin::Twitter;
 use Moose;
 use HTTP::Request;
 use HTTP::Response;
 use LWP::UserAgent;
-extends 'Morris::Connection::Plugin';
+extends 'Horris::Connection::Plugin';
 with 'MooseX::Role::Pluggable::Plugin';
 
 sub irc_privmsg {
@@ -13,7 +13,7 @@ sub irc_privmsg {
 		return;
 	}
 
-	print "recv Twitter URI\n" if $Morris::DEBUG;
+	print "recv Twitter URI\n" if $Horris::DEBUG;
 
 	my $msg;
 	my $request  = HTTP::Request->new( GET => $url );
@@ -35,7 +35,7 @@ __END__
 
 =head1 NAME
 
-Morris::Connection::Plugin::Twitter
+Horris::Connection::Plugin::Twitter
 
 =head1 SYNOPSIS
 

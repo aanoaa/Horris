@@ -1,13 +1,13 @@
-package App::Morris;
+package App::Horris;
 use Moose;
 use Config::Any;
-use Morris;
+use Horris;
 use namespace::clean -except => qw/meta/;
 
 with qw/MooseX::Getopt MooseX::SimpleConfig/;
 
 has '+configfile' => (
-	default => '/etc/morris.conf'
+	default => '/etc/horris.conf'
 );
 
 has config => (
@@ -22,8 +22,8 @@ around _usage_format => sub {
 
 sub run {
 	my $self = shift;
-	my $morris = Morris->new(config => $self->config);
-	$morris->run;
+	my $horris = Horris->new(config => $self->config);
+	$horris->run;
 }
 
 sub config_any_args {
@@ -44,16 +44,16 @@ __END__
 
 =head1 NAME
 
-App::Morris - Command Line Interface For Morris
+App::Horris - Command Line Interface For Horris
 
 =head1 SYNOPSIS
 
-    morris --configfile=/path/to/config.conf
+    horris --configfile=/path/to/config.conf
 
 =head1 OPTIONS
 
 =head2 configfile
 
-The location to find the config file. The default is /etc/morris.conf
+The location to find the config file. The default is /etc/horris.conf
 
 =cut
