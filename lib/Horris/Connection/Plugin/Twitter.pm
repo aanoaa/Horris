@@ -21,7 +21,7 @@ sub irc_privmsg {
 	my $response = $ua->request($request);
 	$msg = $response->status_line unless $response->is_success;
 	($msg) = $response->content =~ m{<meta content="(.*?)" name="description" />};
-	$self->connection->irc_privmsg({
+	$self->connection->irc_notice({
 		channel => $message->channel, 
 		message => $msg
 	});

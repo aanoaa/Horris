@@ -16,7 +16,7 @@ has is_enable => (
 	handles => {
 		enable => 'set', 
 		disable => 'unset', 
-		switch => 'toggle', 
+		_switch => 'toggle', 
 		is_disable => 'not'
 	}
 );
@@ -35,8 +35,6 @@ sub init {
 	print ref $self, " on - ", $self->is_enable ? 'enable' : 'disable', "\n" if $Horris::DEBUG;
 	$self->_connection($conn);
 }
-
-sub disconnect { }
 
 around BUILDARGS => sub {
 	my ($orig, $class, @args) = @_;
@@ -67,11 +65,7 @@ Horris::Connection::Plugin - require interfaces for plugins
     with qw/Horris::Connection::Plugin MooseX::Role::Pluggable::Plugin/;
 
 	sub init {
-		# stuff before connect
-	}
-
-	sub disconnect {
-		# stuff on disconnect
+		# initialize stuff before connect
 	}
 
     # see the documentation for MooseX::Role::Pluggable,

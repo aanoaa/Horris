@@ -71,7 +71,7 @@ sub run {
 	my $irc = AnyEvent::IRC::Client->new();
 	$self->irc($irc);
 
-	$irc->reg_cb(disconnect => sub { $self->occur_event('disconnect'); });
+	$irc->reg_cb(disconnect => sub { $self->occur_event('on_disconnect'); });
 	$irc->reg_cb(connect => sub {
 		my ($con, $err) = @_;
 		if (defined $err) {
@@ -154,13 +154,9 @@ Horris::Connection - Single IRC Connection
 
 =over
 
-=item * connect
+=item * on_connect
 
-=item * disconnect
-
-=item * irc_join
-
-=item * registered
+=item * on_disconnect
 
 =item * irc_privmsg
 
