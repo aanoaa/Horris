@@ -71,12 +71,7 @@ sub run {
 	my $irc = AnyEvent::IRC::Client->new();
 	$self->irc($irc);
 
-	$irc->reg_cb(disconnect => sub {
-		foreach my $plugin (@{ $self->plugin_list }) {
-			$plugin->disconnect;
-		}
-	});
-
+	$irc->reg_cb(disconnect => sub { $self->occur_event('disconnect'); });
 	$irc->reg_cb(connect => sub {
 		my ($con, $err) = @_;
 		if (defined $err) {
@@ -85,7 +80,7 @@ sub run {
 		}
 
 		warn "connected to: " . $self->server . ":" . $self->port if $Horris::DEBUG;
-		$irc->send_srv(JOIN => $_) for @{ $self->channels }
+		$self->occur_event('on_connect');
 	});
 
 	$irc->reg_cb(irc_privmsg => sub {
@@ -96,11 +91,7 @@ sub run {
 			from	=> $raw->{prefix}
 		);
 
-		if ($message->from->nickname ne $self->nickname) { # loop guard
-			foreach my $plugin (@{ $self->plugin_list }) {
-				$plugin->irc_privmsg($message) if $plugin->can('irc_privmsg');
-			}
-		}
+		$self->occur_event('irc_privmsg', $message) if $message->from->nickname ne $self->nickname; # loop guard
 	});
 
 	$irc->connect($self->server, $self->port, {
@@ -124,6 +115,13 @@ sub irc_privmsg {
 sub irc_mode {
     my ($self, $args) = @_;
     $self->send_srv(MODE => $args->{channel} => $args->{mode}, $args->{who});
+}
+
+sub occur_event {
+	my ($self, $event, @args) = @_;
+	foreach my $plugin (@{ $self->plugin_list }) {
+		$plugin->$event(@args) if $plugin->can($event);
+	}
 }
 
 1;
@@ -171,7 +169,7 @@ Horris::Connection - Single IRC Connection
 =item 3 implements
 
 	sub connect {
-		my ($self, $msg) = @_; # $msg is Horris::Message
+		my ($self, @args) = @_;
 		print "connected\n";
 	}
 
