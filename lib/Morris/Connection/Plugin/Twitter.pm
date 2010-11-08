@@ -15,11 +15,12 @@ sub irc_privmsg {
 
 	print "recv Twitter URI\n" if $Morris::DEBUG;
 
+	my $msg;
 	my $request  = HTTP::Request->new( GET => $url );
 	my $ua       = LWP::UserAgent->new;
 	my $response = $ua->request($request);
-	die STDERR $response->status_line, "\n" unless $response->is_success;
-	my ($msg) = $response->content =~ m{<meta content="(.*?)" name="description" />};
+	$msg = $response->status_line unless $response->is_success;
+	($msg) = $response->content =~ m{<meta content="(.*?)" name="description" />};
 	$self->connection->irc_privmsg({
 		channel => $message->channel, 
 		message => $msg

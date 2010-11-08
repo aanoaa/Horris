@@ -146,8 +146,36 @@ Morris::Connection - Single IRC Connection
         username => $username,
     );
 
-    # to receive events
-    $conn->register_hook( $hook_name => $code );
+=head1 HOW TO IMPLEMENTS HOOK METHODS?
+
+=over
+
+=item 1 Make your own Pluggin. like a C<Morris::Connection::Plugin::Foo>.
+
+=item 2 check the list what you want to implement event.
+
+=over
+
+=item * connect
+
+=item * disconnect
+
+=item * irc_join
+
+=item * registered
+
+=item * irc_privmsg
+
+=back
+
+=item 3 implements it
+
+	sub connect {
+		my ($self, $msg) = @_; # $msg is Morris::Message
+		print "connected\n";
+	}
+
+=back
 
     # to send events
     $conn->irc_notice( { channel => $channel, message => $message } );
