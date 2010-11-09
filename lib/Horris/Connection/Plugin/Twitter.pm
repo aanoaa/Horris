@@ -9,6 +9,7 @@ with 'MooseX::Role::Pluggable::Plugin';
 sub irc_privmsg {
 	my ($self, $message) = @_;
 	my $url = $message->message;
+	$url =~ s/#!\///;
 	if ($url !~ m{^\s*http://twitter.com/(.*)?/status/[0-9]+\s*$}) {
 		return;
 	}
