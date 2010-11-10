@@ -4,3 +4,21 @@ use lib 'lib';
 use App::Horris;
 
 App::Horris->new_with_options()->run();
+
+__END__
+
+=pod
+
+=head1 NAME
+
+horris - execute file
+
+=head1 SYNOPSIS
+
+	usage: horris [-?] [long options...] (run 'perldoc App::Horris' for more info)
+	    -? --usage --help  Prints this usage information.
+	    --configfile
+
+	horris --configfile=/path/to/config.conf
+
+=cut
