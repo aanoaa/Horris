@@ -94,6 +94,16 @@ sub run {
 		$self->occur_event('irc_privmsg', $message) if $message->from->nickname ne $self->nickname; # loop guard
 	});
 
+	$irc->reg_cb(privatemsg => sub {
+		my ($con, $nick, $raw) = @_;
+		my $message = Horris::Message->new(
+			channel => '', 
+			message => $raw->{params}->[1], 
+			from	=> $raw->{prefix}
+		);
+		$self->occur_event('on_privatemsg', $nick, $message);
+	});
+
 	$irc->connect($self->server, $self->port, {
 		nick => $self->nickname,
 		user => $self->username,

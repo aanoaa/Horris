@@ -20,6 +20,22 @@ sub irc_privmsg {
 	}
 }
 
+sub on_privatemsg {
+	my ($self, $nick, $message) = @_;
+	my $msg = $message->message;
+	if (my ($nick) = $msg =~ m/^[(:?dis|hit)]+\s+(\w+)/i) {
+		my %channel_list = %{ $self->connection->irc->channel_list };
+		for my $channel (keys %channel_list) {
+			if (grep { m/$nick/ } keys %{ $channel_list{$channel} }) {
+				$self->connection->irc_privmsg({
+					channel => $channel, 
+					message => $nick . ': ' . $self->texts->[int(rand(scalar @{ $self->texts }))]
+				});
+			}
+		}
+	}
+}
+
 1;
 
 __END__
