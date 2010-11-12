@@ -12,10 +12,12 @@ sub irc_privmsg {
 	my ($self, $message) = @_;
 	my $msg = $message->message;
 	my $botname = $self->connection->nickname;
-	if (my ($nick) = $msg =~ m/^$botname\S*\s+[(:?dis|hit)]+\s+(\w+)/i) {
+	if (my ($nick, $typed) = $msg =~ m/^$botname\S*\s+[(:?dis|hit)]+\s+(\w+)\s*(.*)$/i) {
+		my $output = $nick . ': ';
+		$output .= $typed eq '' ? $self->texts->[int(rand(scalar @{ $self->texts }))] : $typed;
 		$self->connection->irc_privmsg({
 			channel => $message->channel, 
-			message => $nick . ': ' . $self->texts->[int(rand(scalar @{ $self->texts }))]
+			message => $output
 		});
 	}
 }
@@ -23,13 +25,15 @@ sub irc_privmsg {
 sub on_privatemsg {
 	my ($self, $nick, $message) = @_;
 	my $msg = $message->message;
-	if (my ($nick) = $msg =~ m/^[(:?dis|hit)]+\s+(\w+)/i) {
+	if (my ($nick, $typed) = $msg =~ m/^[(:?dis|hit)]+\s+(\w+)\s*(.*)$/i) {
+		my $output = $nick . ': ';
+		$output .= $typed eq '' ? $self->texts->[int(rand(scalar @{ $self->texts }))] : $typed;
 		my %channel_list = %{ $self->connection->irc->channel_list };
 		for my $channel (keys %channel_list) {
 			if (grep { m/$nick/ } keys %{ $channel_list{$channel} }) {
 				$self->connection->irc_privmsg({
 					channel => $channel, 
-					message => $nick . ': ' . $self->texts->[int(rand(scalar @{ $self->texts }))]
+					message => $output
 				});
 			}
 		}
