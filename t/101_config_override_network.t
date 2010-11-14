@@ -1,13 +1,13 @@
 use strict;
 use lib "lib";
 use Test::More (tests => 2);
-use App::Morris;
+use App::Horris;
 
 local @ARGV = qw(--configfile t/101_config_override_network.conf);
-my $app = App::Morris->new_with_options();
+my $app = App::Horris->new_with_options();
 
-my $morris = Morris->new_from_config( $app->config );
+my $horris = Horris->new({ config => $app->config });
 
-is( $morris->connections->[0]->nickname, 'overridden' );
-is( $morris->connections->[0]->username, 'overridden' );
+is( $horris->connections->[0]->nickname, 'overridden' );
+is( $horris->connections->[0]->username, 'overridden' );
 

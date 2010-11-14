@@ -14,6 +14,8 @@ sub on_disconnect {
 	exit(0);
 }
 
+__PACKAGE__->meta->make_immutable;
+
 1;
 
 __END__
@@ -26,6 +28,9 @@ Horris::Connection::Plugin::PowerManager
 
 =head1 SYNOPSIS
 
-	...
+	HH:MM:SS    NICK | BOTNAME [꺼져|껒여|exit|quit]
+	HH:MM:SS     <-- | BOTNAME (nick@some.host) has quit (Remote host closed the connection)
+
+anybody can kick the bot.
 
 =cut

@@ -21,14 +21,6 @@ has is_enable => (
 	}
 );
 
-has help => (
-	is => 'ro', 
-	isa => 'Str', 
-	lazy_build => 1, 
-);
-
-sub _build_help { ref $_[0] }
-
 sub init {
 	my ($self, $conn) = @_;
 	my $pname = ref $self;
@@ -56,7 +48,7 @@ __END__
 
 =head1 NAME
 
-Horris::Connection::Plugin - require interfaces for plugins
+Horris::Connection::Plugin - base class of plugins
 
 =head1 SYNOPSIS
 
@@ -64,9 +56,39 @@ Horris::Connection::Plugin - require interfaces for plugins
     use Moose;
     with qw/Horris::Connection::Plugin MooseX::Role::Pluggable::Plugin/;
 
+	# override member variables if you want.
+	has '+is_enable' => (
+		default => 0	# $self->is_enable is false
+	);
+
 	sub init {
-		# initialize stuff before connect
+		# initialize plugin stuff here
 	}
+
+	sub on_connect {
+		# implement on_connect stuff here
+	}
+
+	sub on_disconnect {
+		# implement on_disconnect stuff here
+	}
+
+	sub irc_privmsg {
+		my ($self, $message) = @_;
+		#	this hook method will called by Horris::Connection
+		#	when 'irc_privmsg' event occur in joinning irc channels
+		#	see the AnyEvent::IRC::Client for 'irc_privmsg' more detail
+		#
+		# implement irc_privmsg stuff here
+	}
+
+	sub on_privatemsg {
+		my ($self, $nick, $message) = @_;
+		# this hook method will called when who send a private message to
+		# your bot. 
+	}
+
+	__PACKAGE__->meta->make_immutable;
 
     # see the documentation for MooseX::Role::Pluggable,
 	# MooseX::Role::Pluggable::Plugin for info on how to get your Moose
@@ -74,6 +96,6 @@ Horris::Connection::Plugin - require interfaces for plugins
 
 =head1 SEE ALSO
 
-L<MooseX::Role::Pluggable> L<MooseX::Role::Pluggable::Plugin>
+L<MooseX::Role::Pluggable> L<MooseX::Role::Pluggable::Plugin> L<Horris::Connection>
 
 =cut

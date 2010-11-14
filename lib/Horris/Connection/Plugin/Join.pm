@@ -13,6 +13,8 @@ sub on_connect {
 	$self->connection->irc->send_srv(JOIN => $_) for @{ $self->channels };
 }
 
+__PACKAGE__->meta->make_immutable;
+
 1;
 
 __END__
@@ -25,6 +27,17 @@ Horris::Connection::Plugin::Join
 
 =head1 SYNOPSIS
 
-	...
+BOT connected IRC, then auto joinning typed(config) channel
+
+	# single channel
+	<Plugin Join>
+		channels [ \#test ] # for a single channel
+	</Plugin>
+
+	# multi channels
+	<Plugin Join>
+		channels #test1
+		channels #test2
+	</Plugin>
 
 =cut

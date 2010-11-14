@@ -40,6 +40,8 @@ sub on_privatemsg {
 	}
 }
 
+__PACKAGE__->meta->make_immutable;
+
 1;
 
 __END__
@@ -51,7 +53,35 @@ __END__
 Horris::Connection::Plugin::Hit
 
 =head1 SYNOPSIS
+ 
+	I don't know about origin of a word 'dis'
+	some day a3r0 said, hongbot: hit jeen
+	so i made this.
 
-	...
+	# assume here at a irc channel
+	HH:MM:SS    NICK | BOTNAME dis NICK
+	HH:MM:SS BOTNAME | NICK: #@!##$@!@#(random dis message, you can type dis message to configuration file)
+
+	# also you can send a dis message hide behind the BOT(aka Anonymous)
+	HH:MM:SS    NICK | /msg BOTNAME dis NICK OH! SHIT!
+	HH:MM:SS BOTNAME | NICK: OH! SHIT!
+
+=head1 DESCRIPTION
+
+=head2 COMMAND
+
+=over
+
+=item 1 BOTNAME dis
+
+=item 2 BOTNAME dis message
+
+=item 3 /msg BOTNAME dis
+
+=item 4 /msg BOTNAME dis message
+
+=back
+
+C<hit> is C<dis> alias
 
 =cut

@@ -30,6 +30,8 @@ sub irc_privmsg {
 	}
 }
 
+__PACKAGE__->meta->make_immutable;
+
 1;
 
 __END__
@@ -42,6 +44,7 @@ Horris::Connection::Plugin::Eng2kor
 
 =head1 SYNOPSIS
 
-	...
+	don't use it.
+	it contained unicode bug!
 
 =cut

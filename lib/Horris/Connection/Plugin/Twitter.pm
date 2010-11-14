@@ -28,6 +28,8 @@ sub irc_privmsg {
 	});
 }
 
+__PACKAGE__->meta->make_immutable;
+
 1;
 
 __END__
@@ -40,6 +42,6 @@ Horris::Connection::Plugin::Twitter
 
 =head1 SYNOPSIS
 
-	...
+when bot got a twitter url, notice the title.
 
 =cut

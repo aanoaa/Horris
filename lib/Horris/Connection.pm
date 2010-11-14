@@ -154,29 +154,31 @@ Horris::Connection - Single IRC Connection
         username => $username,
     );
 
-=head1 HOW TO IMPLEMENTS HOOK METHODS?
+=head1 HOW TO IMPLEMENTS YOUR OWN HOOK METHODS?
 
 =over
 
-=item 1 Make your own Pluggin. like a L<Horris::Connection::Plugin::Foo>.
+=item 1 Make your own Pluggin Module. like a L<Horris::Connection::Plugin::Foo>.
 
 =item 2 check the list what you want to implement event.
 
 =over
 
-=item * on_connect
+=item * on_connect - no args
 
-=item * on_disconnect
+=item * on_disconnect - no args
 
-=item * irc_privmsg
+=item * on_privatemsg - args with (nickname, Horris::Message)
+
+=item * irc_privmsg - args with (Horris::Message)
 
 =back
 
 =item 3 implements
 
-	sub connect {
-		my ($self, @args) = @_;
-		print "connected\n";
+	sub on_connect {
+		my ($self) = @_;
+		# your stuff here after connected
 	}
 
 =back

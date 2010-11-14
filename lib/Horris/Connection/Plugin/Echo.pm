@@ -27,6 +27,8 @@ sub irc_privmsg {
 	}
 }
 
+__PACKAGE__->meta->make_immutable;
+
 1;
 
 __END__
@@ -39,6 +41,18 @@ Horris::Connection::Plugin::Echo
 
 =head1 SYNOPSIS
 
-	botname echo [on|off]
+	# assume here at a irc channel
+	HH:MM:SS    NICK | BOTNAME echo
+	HH:MM:SS    NICK | hi
+	HH:MM:SS      -- | Notice(BOTNAME) echo on
+	HH:MM:SS BOTNAME | NICK: hi
+	HH:MM:SS    NICK | BOTNAME echo
+	HH:MM:SS      -- | Notice(BOTNAME) echo off
+	HH:MM:SS    NICK | hi
+	# and no echo here..
+
+=head1 DESCRIPTION
+
+anybody can toggle BOT's echo feature by C<BOTNAME echo> command.
 
 =cut

@@ -38,6 +38,6 @@ Horris::Connection::Plugin::RPC
 
 =head1 SYNOPSIS
 
-	...
+	still implements
 
 =cut

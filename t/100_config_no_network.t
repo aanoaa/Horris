@@ -1,13 +1,13 @@
 use strict;
 use lib "lib";
 use Test::More (tests => 1);
-use App::Morris;
+use App::Horris;
 
 local @ARGV = qw(--configfile t/100_config_no_network.conf);
-my $app = App::Morris->new_with_options();
+my $app = App::Horris->new_with_options();
 
 eval {
-    my $morris = Morris->new_from_config( $app->config );
+    my $horris = Horris->new({ config => $app->config });
+	$horris->run;
 };
 like($@, qr/No network specified for connection 'test'/);
-

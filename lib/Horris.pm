@@ -37,7 +37,7 @@ sub _build_connections {
 	my ($self) = @_;
 	my @connections;
 	while (my ($name, $conn) = each %{$self->{config}{connection}}) {
-		confess "No network specified connection '$name'" unless $conn->{network};
+		confess "No network specified for connection '$name'" unless $conn->{network};
 		print "Connection Name: $name\n" if $Horris::DEBUG;
 
 		my $network = $self->{config}{network}->{ $conn->{network} };
@@ -75,6 +75,16 @@ Horris - An IRC Bot Based On Moose/AnyEvent
 
 =head1 SYNOPSIS
 
-	...
+	my $app = new App::Horris->new_with_options(); # require config file
+	my $horris = new Horris({ config => $app->config });
+	$horris->run;
+
+	or
+
+	App::Horris->new_with->options->run;    # more general, 'App::Horris::run' calls 'Horris::run' automatically
+
+=head1 SEE ALSO
+
+L<App::Horris> L<horris>
 
 =cut
