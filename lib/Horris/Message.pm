@@ -101,11 +101,11 @@ sub __check_parsed {
     if (! $self->__parsed) {
         my $ref = $self->str_ref;
 
-        $$ref =~ /^(\W)?([^!]+)!([^@]+)@(.*)$/;
-        $self->set_modifier( $1 || '' );
-        $self->set_nickname( $2 || '' );
-        $self->set_username( $3 || '' );
-        $self->set_hostname( $4 || '' );
+		$$ref =~ /^([^!]+)!([^@]+)@(.*)$/;
+        $self->set_modifier( '' );
+        $self->set_nickname( $1 || '' );
+        $self->set_username( $2 || '' );
+        $self->set_hostname( $3 || '' );
         $self->__parsed(1);
     }
     return $next->($self);
