@@ -99,7 +99,7 @@ sub run {
 		my $message = Horris::Message->new(
 			channel => '', 
 			message => $raw->{params}->[1], 
-			from    => defined $raw->{prefix} ? $raw->{prefix} : '';
+			from    => defined $raw->{prefix} ? $raw->{prefix} : '', 
 		);
 		$self->occur_event('on_privatemsg', $nick, $message);
 	});
@@ -134,6 +134,8 @@ sub occur_event {
 	}
 }
 
+__PACKAGE__->meta->make_immutable();
+
 1;
 
 __END__
@@ -152,6 +154,7 @@ Horris::Connection - Single IRC Connection
         password => $optional_password,
         server   => $server_name,
         username => $username,
+		plugins	 => [qw/Foo Bar Baz/], 
     );
 
 =head1 HOW TO IMPLEMENTS YOUR OWN HOOK METHODS?

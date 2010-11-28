@@ -5,7 +5,7 @@ use Const::Fast;
 use Horris::Connection;
 use namespace::clean -except => qw/meta/;
 
-our $VERSION = '0.0.1';
+our $VERSION = '0.0.2';
 $VERSION = eval $VERSION;
 
 const our $DEBUG => $ENV{PERL_HORRIS_DEBUG};

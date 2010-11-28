@@ -1,6 +1,25 @@
 Changes
 =======
 
+v0.0.2
+------
+
+* "Horris::Connection::Plugin::Twitter"
+  * 테스트 unit 추가
+  * 문서내 https 처리를 내용 추가.
+  * https 처리 안되던 버그수정
+  * 로그에 기록을 남기기 위해 "Notice"로 응답하던 메세지를 "privmsg" 로 변경
+
+v0.0.1
+------
+
+* 개인적인 공부 목적으로 fork
+* 프로젝트명 "Horris"로 변경
+* 적극적으로 한글사용
+  * 내가 영어를 못해서.. ;ㅁ;
+* plugin 변경
+  "MooseX::Role::Pluggable" 사용
+
 0.01000_02
     * Fix PeekURL plugin's regular expression to search for charsets
 

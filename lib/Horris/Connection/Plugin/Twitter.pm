@@ -8,10 +8,22 @@ with 'MooseX::Role::Pluggable::Plugin';
 
 sub irc_privmsg {
 	my ($self, $message) = @_;
+	my $msg = $self->_parse_status($message);
+
+	return unless defined $msg;
+
+	$self->connection->irc_privmsg({
+		channel => $message->channel, 
+		message => $msg
+	});
+}
+
+sub _parse_status {
+	my ($self, $message) = @_;
 	my $url = $message->message;
 	$url =~ s/#!\///;
-	if ($url !~ m{^\s*http://twitter.com/(.*)?/status/[0-9]+\s*$}) {
-		return;
+	if ($url !~ m{^\s*https?://twitter\.com/(.*)?/status/[0-9]+\s*$}) {
+		return undef;
 	}
 
 	print "recv Twitter URI\n" if $Horris::DEBUG;
@@ -20,12 +32,14 @@ sub irc_privmsg {
 	my $request  = HTTP::Request->new( GET => $url );
 	my $ua       = LWP::UserAgent->new;
 	my $response = $ua->request($request);
-	$msg = $response->status_line unless $response->is_success;
-	($msg) = $response->content =~ m{<meta content="(.*?)" name="description" />};
-	$self->connection->irc_notice({
-		channel => $message->channel, 
-		message => $msg
-	});
+	if ($response->is_success) {
+		my ($nick) = $response->content =~ m{<title id="page_title">Twitter / ([^:]*)};
+		($msg) = $response->content =~ m{<meta content="(.*?)" name="description" />};
+		$msg = $nick . ': ' . $msg;
+	} else {
+		$msg = $response->status_line unless $response->is_success;
+	}
+	return $msg;
 }
 
 __PACKAGE__->meta->make_immutable;
@@ -43,5 +57,9 @@ Horris::Connection::Plugin::Twitter
 =head1 SYNOPSIS
 
 when bot got a twitter url, notice the title.
+
+=head1 SEE ALSO
+
+required L<Crypt::SSLeay> for C<https> connection
 
 =cut
