@@ -22,20 +22,25 @@ sub _parse_status {
 	my ($self, $message) = @_;
 	my $url = $message->message;
 	$url =~ s/#!\///;
-	if ($url !~ m{^\s*https?://twitter\.com/(.*)?/status/[0-9]+\s*$}) {
+	if ($url !~ m{^\s*https?://(:?.*)twitter\.com/(.*)?/status/[0-9]+\s*$}) {
 		return undef;
 	}
 
 	print "recv Twitter URI\n" if $Horris::DEBUG;
 
-	my $msg;
+	my ($msg, $nick);
 	my $request  = HTTP::Request->new( GET => $url );
 	my $ua       = LWP::UserAgent->new;
 	my $response = $ua->request($request);
 	if ($response->is_success) {
-		my ($nick) = $response->content =~ m{<title id="page_title">Twitter / ([^:]*)};
-		($msg) = $response->content =~ m{<meta content="(.*?)" name="description" />};
-		$msg = $nick . ': ' . $msg;
+        if ($url =~ /mobile\./i) {
+            ($nick, $msg) = $response->content =~ m{<span class="status">\@<a href="/([^"]+)">\1</a>(.*)</span>};
+		    $msg = $nick . ': ' . $msg;
+        } else {
+		    ($nick) = $response->content =~ m{<title id="page_title">Twitter / ([^:]*)};
+		    ($msg) = $response->content =~ m{<meta content="(.*?)" name="description" />};
+		    $msg = $nick . ': ' . $msg;
+        }
 	} else {
 		$msg = $response->status_line unless $response->is_success;
 	}
