@@ -20,9 +20,10 @@ sub irc_privmsg {
 
 sub _parse_status {
 	my ($self, $message) = @_;
-	my $url = $message->message;
-	$url =~ s/#!\///;
-	if ($url !~ m{^\s*https?://(:?.*)twitter\.com/(.*)?/status/[0-9]+\s*$}) {
+	my $raw = $message->message;
+	$raw =~ s/#!\///;
+    my $url;
+	unless (($url) = $raw =~ m{(https?://(:?.*)twitter\.com/(:?[^/]+)/status/[0-9]+)}) {
 		return undef;
 	}
 

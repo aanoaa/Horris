@@ -10,6 +10,7 @@ my @TEST_URLS = (
 	'https://twitter.com/#!/umma_coding_bot/status/8721128864350209', 
 	'http://twitter.com/umma_coding_bot/status/8721128864350209', 
 	'https://twitter.com/umma_coding_bot/status/8721128864350209', 
+	'something!http://twitter.com/#!/umma_coding_bot/status/8721128864350209', 
 );
 
 my $TEST_URL_MOBILE = 'http://mobile.twitter.com/alexbonkoo/status/9181735065493504';
