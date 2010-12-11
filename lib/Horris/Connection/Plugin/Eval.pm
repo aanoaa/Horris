@@ -37,10 +37,16 @@ sub _eval {
     my $res = $ua->request($req);
     if ($res->is_success) {
         my $scalar = JSON::from_json($res->content, { utf8  => 1 });
-        return $scalar->{stderr} eq '' ? $scalar->{stdout} : $scalar->{stderr};
+        return $scalar->{stderr} eq '' ? $self->decode_hex($scalar->{stdout}) : $scalar->{stderr};
     } else {
         return $res->status_line;
     }
+}
+
+sub decode_hex {
+    my ($self, $hex) = @_;
+    $hex =~ s/\%([A-Fa-f0-9]{2})/pack('C', hex($1))/seg;
+    return $hex;
 }
 
 __PACKAGE__->meta->make_immutable;
