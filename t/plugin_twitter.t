@@ -8,8 +8,9 @@ use Test::More (tests => 3);
 my @TEST_URLS = (
 	'http://twitter.com/#!/umma_coding_bot/status/8721128864350209', 
 	'https://twitter.com/#!/umma_coding_bot/status/8721128864350209', 
+	'http://twitter.com/#!/umma_coding_bot/statuses/8721128864350209', 
 	'http://twitter.com/umma_coding_bot/status/8721128864350209', 
-	'https://twitter.com/umma_coding_bot/status/8721128864350209', 
+	'https://twitter.com/umma_coding_bot/statuses/8721128864350209', 
 	'something!http://twitter.com/#!/umma_coding_bot/status/8721128864350209', 
 );
 
