@@ -23,7 +23,7 @@ sub _parse_status {
 	my $raw = $message->message;
 	$raw =~ s/#!\///;
     my $url;
-	unless (($url) = $raw =~ m{(https?://(:?.*)twitter\.com/(:?[^/]+)/status/[0-9]+)}) {
+	unless (($url) = $raw =~ m{(https?://(:?.*)twitter\.com/(:?[^/]+)/st\w+/[0-9]+)}) { # status, statuses
 		return undef;
 	}
 
