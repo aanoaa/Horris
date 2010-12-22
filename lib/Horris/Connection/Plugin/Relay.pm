@@ -81,8 +81,6 @@ sub irc_privmsg {
 
 	return unless $config;
 
-	print "before __guard \n";
-
 	my $ports = grp_get $config->{target};
 	if($ports) {
 		my $server = $ports->[0];
