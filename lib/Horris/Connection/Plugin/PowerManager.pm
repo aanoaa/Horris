@@ -10,10 +10,6 @@ sub irc_privmsg {
 	$self->connection->irc->disconnect if $msg =~ m{^$botname\S*\s+(:?꺼져|껒여|exit|quit)};
 }
 
-sub on_disconnect {
-	exit(0);
-}
-
 __PACKAGE__->meta->make_immutable;
 
 1;
