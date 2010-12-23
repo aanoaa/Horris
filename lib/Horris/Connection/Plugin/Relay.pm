@@ -84,7 +84,7 @@ sub irc_privmsg {
 	my $ports = grp_get $config->{target};
 	if($ports) {
 		my $server = $ports->[0];
-		my $msg = sprintf('<%s::%s> %s', $channel, $nickname, $message);
+		my $msg = sprintf('<%s> %s', $nickname, $message);
 		if ($config->{encode} && $config->{decode}) {
 		$msg = Encode::encode($config->{encode}, Encode::decode($config->{decode}, $msg));
 		}
