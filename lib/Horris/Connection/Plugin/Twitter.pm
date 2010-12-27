@@ -35,12 +35,8 @@ sub _parse_status {
 	my $response = $ua->request($request);
 	if ($response->is_success) {
         if ($url =~ /mobile\./i) {
-            ($nick, $msg) = $response->content =~ m{<span class="status">[^<]*<a href="/([^"]+)">\1</a>(.*)</span>};
-            unless (defined $nick && defined $msg) {
-                ($msg) = $response->content =~ m{<span class="status">(.*)</span>};
-                ($nick) = $url =~ m{(\w+)/status};
-            }
-
+            ($msg) = $response->content =~ m{<span class="status">(.*)</span>};
+            ($nick) = $url =~ m{(\w+)/status};
             $msg =~ s{<[^>]*>}{}g;
 		    $msg = $nick . ': ' . $msg;
         } else {
