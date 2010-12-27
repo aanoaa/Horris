@@ -35,7 +35,7 @@ sub _parse_status {
 	my $response = $ua->request($request);
 	if ($response->is_success) {
         if ($url =~ /mobile\./i) {
-            ($nick, $msg) = $response->content =~ m{<span class="status">\@<a href="/([^"]+)">\1</a>(.*)</span>};
+            ($nick, $msg) = $response->content =~ m{<span class="status">[^<]*<a href="/([^"]+)">\1</a>(.*)</span>};
 		    $msg = $nick . ': ' . $msg;
         } else {
 		    ($nick) = $response->content =~ m{<title id="page_title">Twitter / ([^:]*)};
