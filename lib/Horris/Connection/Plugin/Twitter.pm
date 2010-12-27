@@ -38,10 +38,10 @@ sub _parse_status {
             ($nick, $msg) = $response->content =~ m{<span class="status">[^<]*<a href="/([^"]+)">\1</a>(.*)</span>};
             unless (defined $nick && defined $msg) {
                 ($msg) = $response->content =~ m{<span class="status">(.*)</span>};
-                $msg =~ s{<[^>]*>}{}g;
                 ($nick) = $url =~ m{(\w+)/status};
             }
 
+            $msg =~ s{<[^>]*>}{}g;
 		    $msg = $nick . ': ' . $msg;
         } else {
 		    ($nick) = $response->content =~ m{<title id="page_title">Twitter / ([^:]*)};
