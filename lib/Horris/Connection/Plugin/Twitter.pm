@@ -12,10 +12,12 @@ sub irc_privmsg {
 
 	return unless defined $msg;
 
-	$self->connection->irc_privmsg({
-		channel => $message->channel, 
-		message => $msg
-	});
+    for my $m (split(/\n/, $msg)) {
+	    $self->connection->irc_privmsg({
+		    channel => $message->channel, 
+		    message => $m
+	    });
+    }
 }
 
 sub _parse_status {
@@ -35,13 +37,13 @@ sub _parse_status {
 	my $response = $ua->request($request);
 	if ($response->is_success) {
         if ($url =~ /mobile\./i) {
-            ($msg) = $response->content =~ m{<span class="status">(.*)</span>};
+            ($msg) = $response->content =~ m{<span class="status">(.*)</span>}m;
             ($nick) = $url =~ m{(\w+)/status};
             $msg =~ s{<[^>]*>}{}g;
 		    $msg = $nick . ': ' . $msg;
         } else {
 		    ($nick) = $response->content =~ m{<title id="page_title">Twitter / ([^:]*)};
-		    ($msg) = $response->content =~ m{<meta content="(.*?)" name="description" />};
+		    ($msg) = $response->content =~ m{<meta content="([^"]*)" name="description" />}m;
 		    $msg = $nick . ': ' . $msg;
         }
 	} else {
