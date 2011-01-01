@@ -41,7 +41,7 @@ sub _build_connections {
 		my $connection = Horris::Connection->new({
 			%$network,
 			%$conn,
-			plugins => [keys %{ $conn->{plugin} }]
+			plugins => $conn->{loadmodule}
 		});
 		push @connections, $connection;
 	}

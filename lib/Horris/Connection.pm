@@ -129,7 +129,9 @@ sub irc_mode {
 
 sub occur_event {
 	my ($self, $event, @args) = @_;
-	foreach my $plugin (@{ $self->plugin_list }) {
+	my $plugins = $self->plugin_hash;
+	foreach my $plugin_name (@{ $self->plugins }) {
+		my $plugin = $plugins->{$plugin_name};
 		$plugin->$event(@args) if $plugin->can($event);
 	}
 }
