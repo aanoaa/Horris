@@ -20,6 +20,7 @@ sub irc_privmsg {
 			message => $output
 		});
 	}
+	return $self->pass;
 }
 
 sub on_privatemsg {
@@ -38,6 +39,7 @@ sub on_privatemsg {
 			}
 		}
 	}
+	return $self->pass;
 }
 
 __PACKAGE__->meta->make_immutable;

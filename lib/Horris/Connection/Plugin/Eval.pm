@@ -19,6 +19,8 @@ sub irc_privmsg {
 		    message => $_
 	    });
     }
+
+	return $self->pass;
 }
 
 sub _eval {

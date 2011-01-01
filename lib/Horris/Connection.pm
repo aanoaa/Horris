@@ -132,7 +132,8 @@ sub occur_event {
 	my $plugins = $self->plugin_hash;
 	foreach my $plugin_name (@{ $self->plugins }) {
 		my $plugin = $plugins->{$plugin_name};
-		$plugin->$event(@args) if $plugin->can($event);
+		my $rev = $plugin->$event(@args) if $plugin->can($event);
+		last if defined $rev and $rev;
 	}
 }
 

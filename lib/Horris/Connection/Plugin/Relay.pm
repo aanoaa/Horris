@@ -65,6 +65,8 @@ sub on_connect {
     };
 	warn "MP Server - $server\n";
     $self->__guard( grp_reg $self->group, $server );
+
+	return $self->pass;
 }
 
 sub irc_privmsg {

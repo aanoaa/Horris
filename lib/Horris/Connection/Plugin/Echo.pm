@@ -25,6 +25,8 @@ sub irc_privmsg {
 			message => $message->from->nickname . ': ' . $msg
 		});
 	}
+
+	return $self->pass;
 }
 
 __PACKAGE__->meta->make_immutable;

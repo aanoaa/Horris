@@ -11,6 +11,7 @@ has channels => (
 sub on_connect {
 	my ($self) = @_;
 	$self->connection->irc->send_srv(JOIN => $_) for @{ $self->channels };
+	return $self->pass;
 }
 
 __PACKAGE__->meta->make_immutable;

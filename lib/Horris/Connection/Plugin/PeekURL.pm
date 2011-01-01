@@ -18,17 +18,20 @@ sub irc_privmsg {
         my $do_peek = defined($2) ? 0 : 1;
         next unless $do_peek;
 
+		my $shorten_url;
         my $uri = URI->new($1);
         next unless $uri->scheme && $uri->scheme =~ /^http/i;
         next unless $uri->authority;
 
-        if (length "$uri" > 27 && $uri->authority !~ /tinyurl|bit\.ly/) {
-            $uri = URI->new(makeashorterlink($uri));
-            $self->connection->irc_notice({
-                channel => $msg->channel,
-                message => "short url: $uri"
-            });
+        if (length "$uri" > 50 && $uri->authority !~ /tinyurl|bit\.ly/) {
+			$shorten_url = makeashorterlink($uri);
+            $uri = URI->new($shorten_url);
+#            $self->connection->irc_notice({
+#                channel => $msg->channel,
+#                message => "short url: $uri"
+#            });
         }
+		$shorten_url = $shorten_url ? " - $shorten_url" : '';
 
         my @ct;
         my $ct = 0; # 0 - text, 1 - image, 2, other
@@ -58,7 +61,7 @@ sub irc_privmsg {
                     $ct = 2;
                     $self->connection->irc_notice({
                         channel => $msg->channel, 
-                        message => sprintf( "%s [%s]", $uri, $ct[0])
+                        message => sprintf( "%s [%s]%s", $uri, $ct[0], $shorten_url)
                     });
                     return;
                 }
@@ -79,7 +82,7 @@ sub irc_privmsg {
                     my($width, $height) = Image::Size::imgsize($file);
                     $self->connection->irc_notice({
                         channel => $msg->channel, 
-                        message => sprintf( "%s [%s, w=%d, h=%d]", $uri, $ct[0], $width, $height )
+                        message => sprintf( "%s [%s, w=%d, h=%d]%s", $uri, $ct[0], $width, $height, $shorten_url )
                     });
                 } else {
                     my $p;
@@ -133,9 +136,10 @@ sub irc_privmsg {
                         $self->connection->irc_notice({
                             channel => $msg->channel,
                             message => encode_utf8(
-                                sprintf('%s [%s]', 
+                                sprintf('%s [%s]%s', 
                                     $title ? $title->as_trimmed_text(skip_dels => 1) || '' : 'No title',
-                                    $ct[0] || '?'
+                                    $ct[0] || '?',
+									$shorten_url
                                 )
                             )
                         });
@@ -155,6 +159,8 @@ sub irc_privmsg {
             }
         ;
     }
+
+	$self->pass;
 }
 
 __PACKAGE__->meta->make_immutable;

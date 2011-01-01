@@ -10,7 +10,7 @@ sub irc_privmsg {
 	my ($self, $message) = @_;
 	my $msg = $self->_parse_status($message);
 
-	return unless defined $msg;
+	return $self->pass unless defined $msg;
 
     for my $m (split(/\n/, $msg)) {
 	    $self->connection->irc_privmsg({
@@ -18,6 +18,8 @@ sub irc_privmsg {
 		    message => $m
 	    });
     }
+
+	return $self->done;
 }
 
 sub _parse_status {

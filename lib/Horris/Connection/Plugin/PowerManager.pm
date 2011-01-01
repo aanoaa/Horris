@@ -8,6 +8,7 @@ sub irc_privmsg {
 	my $msg = $message->message;
 	my $botname = $self->connection->nickname;
 	$self->connection->irc->disconnect if $msg =~ m{^$botname\S*\s+(:?꺼져|껒여|exit|quit)};
+	return $self->pass;
 }
 
 __PACKAGE__->meta->make_immutable;

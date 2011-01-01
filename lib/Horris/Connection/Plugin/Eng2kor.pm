@@ -28,6 +28,8 @@ sub irc_privmsg {
 			});
 		}
 	}
+
+	return $self->pass;
 }
 
 __PACKAGE__->meta->make_immutable;

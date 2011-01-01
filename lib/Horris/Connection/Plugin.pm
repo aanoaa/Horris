@@ -21,6 +21,18 @@ has is_enable => (
 	}
 );
 
+has pass => (
+	is => 'ro',
+	isa => 'Int',
+	default => 0,
+);
+
+has done => (
+	is => 'ro',
+	isa => 'Int',
+	default => 1,
+);
+
 sub init {
 	my ($self, $conn) = @_;
 	my $pname = ref $self;
