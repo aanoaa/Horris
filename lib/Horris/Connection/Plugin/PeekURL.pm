@@ -123,26 +123,38 @@ sub irc_privmsg {
                         };
                         if ($@) {
                             # if we got bad content, attempt to decode in order
-                            foreach my $charset qw(cp949 euc-kr utf-8) {
+                            foreach my $try_charset qw(cp949 euc-kr utf-8) {
                                 eval {
-                                    $p->parse_content(decode($charset, $data, FB_CROAK ) );
+                                    $p->parse_content(decode($try_charset, $data, FB_CROAK ) );
                                 };
                     
+								$charset = $try_charset unless $@;
                                 last unless $@;
                             }
                         }
         
                         my ($title) = $p->look_down(_tag => qr/^title$/i);
+						$title ||= $self->_get_dirty_title($data, $charset);
+
+						my $title_text;
+						if(ref(\$title) eq 'SCALAR') {
+							$title_text = $title;
+						}
+						else {
+							$title_text = $title ? $title->as_trimmed_text(skip_dels => 1) || '' : 'No title';
+						}
+
                         $self->connection->irc_notice({
                             channel => $msg->channel,
                             message => encode_utf8(
                                 sprintf('%s [%s]%s', 
-                                    $title ? $title->as_trimmed_text(skip_dels => 1) || '' : 'No title',
+                                    $title_text,
                                     $ct[0] || '?',
 									$shorten_url
                                 )
                             )
                         });
+
                     };
                     if ($@) {
                         $self->connection->irc_notice({
@@ -161,6 +173,13 @@ sub irc_privmsg {
     }
 
 	$self->pass;
+}
+
+sub _get_dirty_title {
+	my ($self, $data, $charset) = @_;
+	my $html = decode($charset, $data);
+	$html =~ m{<title>(.+)</title>};
+	return $1;
 }
 
 __PACKAGE__->meta->make_immutable;
