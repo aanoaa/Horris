@@ -194,4 +194,8 @@ Horris::Connection - Single IRC Connection
     $conn->irc_privmsg( { channel => $channel, message => $message } );
     $conn->irc_mode( { channel => $channel, mode => $new_mode, who => $target } );
 
+=head1 DESCRIPTION
+
+C<plugin> - configuration 을 위해 필요하다. 일단 여기까쥐..
+
 =cut
