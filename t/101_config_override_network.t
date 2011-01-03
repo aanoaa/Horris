@@ -10,4 +10,3 @@ my $horris = Horris->new({ config => $app->config });
 
 is( $horris->connections->[0]->nickname, 'overridden' );
 is( $horris->connections->[0]->username, 'overridden' );
-

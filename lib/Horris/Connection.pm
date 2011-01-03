@@ -51,15 +51,6 @@ has channels => (
 	isa => 'ArrayRef[Str]', 
 );
 
-has 'plugin' => (
-	traits => ['Hash'], 
-	is => 'ro', 
-	isa => 'HashRef', 
-	handles => {
-		get_args => 'get',
-	}, 
-);
-
 sub _build_username { $_[0]->nickname }
 
 sub run {
