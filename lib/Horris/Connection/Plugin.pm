@@ -44,7 +44,9 @@ around BUILDARGS => sub {
 	my ($orig, $class, @args) = @_;
 	my $self = $class->$orig(@args);
 	my @reserve_keys = qw/parent name/;
-	while (my ($key, $value) = each %{ $self->{parent}{plugin}{$self->{name}} }) {
+    use Data::Dumper;
+    print Dumper($self->{parent});
+	while (my ($key, $value) = each %{ $self->{parent}{plugin_pref}{$self->{name}} }) {
 		confess 'keys [' . join(', ', @reserve_keys) . "] are reserved\n" if grep { $key eq $_ } @reserve_keys;
 		$self->{$key} = $value;
 	}

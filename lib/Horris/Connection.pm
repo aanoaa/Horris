@@ -51,6 +51,8 @@ has channels => (
 	isa => 'ArrayRef[Str]', 
 );
 
+# plugin's preference from configfle,
+# Horris::Connection::Plugin using it when all the plugins are initialize.
 has 'plugin' => (
     traits => ['Hash'], 
     is => 'ro', 
@@ -64,7 +66,7 @@ sub _build_username { $_[0]->nickname }
 
 sub run {
 	my $self = shift;
-	foreach my $plugin (@{ $self->plugin_list }) {
+	foreach my $plugin (@{ $self->plugin_list }) { # WARNING: DO NOT CHANGE: plugin_list is lazy_build. it means initialize all the plugins at here.
 		$plugin->init($self);
 	}
 
