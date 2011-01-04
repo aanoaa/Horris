@@ -36,7 +36,7 @@ has done => (
 sub init {
 	my ($self, $conn) = @_;
 	my $pname = ref $self;
-	print ref $self, " on - ", $self->is_enable ? 'enable' : 'disable', "\n" if $Horris::DEBUG;
+	print $pname, " on - ", $self->is_enable ? 'enable' : 'disable', "\n" if $Horris::DEBUG;
 	$self->_connection($conn);
 }
 
@@ -44,9 +44,7 @@ around BUILDARGS => sub {
 	my ($orig, $class, @args) = @_;
 	my $self = $class->$orig(@args);
 	my @reserve_keys = qw/parent name/;
-    use Data::Dumper;
-    print Dumper($self->{parent});
-	while (my ($key, $value) = each %{ $self->{parent}{plugin_pref}{$self->{name}} }) {
+	while (my ($key, $value) = each %{ $self->{parent}{plugin}{$self->{name}} }) {
 		confess 'keys [' . join(', ', @reserve_keys) . "] are reserved\n" if grep { $key eq $_ } @reserve_keys;
 		$self->{$key} = $value;
 	}
