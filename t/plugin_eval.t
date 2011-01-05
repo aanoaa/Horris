@@ -4,35 +4,39 @@ use warnings;
 use lib ('lib', 't/lib');
 use Horris::Instance;
 use Horris::Connection;
+use Horris::Connection::Plugin::Eval;
+use Test::MockObject::Extends;
 use Test::More (tests => 2);
 
-my $instance = Horris::Instance->new(['Eval']);
-my $test_message;
-my $expected_message;
-my $message;
+my $plugin_name = 'Eval';
+my $horris = Horris::Instance->new([$plugin_name]);
+my $plugin = Horris::Connection::Plugin::Eval->new({
+    parent => $horris->{conn}, 
+    name => $plugin_name, 
+    $plugin_name => {} # other configuration here
+});
 
-$test_message = 'eval: print 1 .. 10;';
-$expected_message = '12345678910';
-$message = Horris::Message->new(
-    channel => '#test',
-    message => $test_message, 
-    from	=> 'test',
+my $conn = Test::MockObject::Extends->new('Horris::Connection');
+$plugin->_connection($conn);
+
+my $event = 'irc_privmsg';
+
+my %test_message = (
+    'eval: print 1 .. 10;' => '12345678910', 
+    'eval: print "나는미남";' => '나는미남'
 );
 
-foreach my $plugin (@{ $instance->{conn}->plugin_list }) {
-    my $msg = $plugin->_eval($message) if $plugin->can('_eval');
-    is ($msg, $expected_message, 'correct stdout');
-}
+for my $key (keys %test_message) {
+    $conn->mock($event, sub {
+        my ($self, $args) = @_;
+        like($args->{message}, qr/$test_message{$key}/);
+    });
 
-$test_message = 'eval: print "나는미남";';
-$expected_message = '나는미남';
-$message = Horris::Message->new(
-    channel => '#test',
-    message => $test_message, 
-    from	=> 'test',
-);
+    my $message = Horris::Message->new(
+        channel => '#test',
+        message => $key, 
+        from	=> 'test',
+    );
 
-foreach my $plugin (@{ $instance->{conn}->plugin_list }) {
-    my $msg = $plugin->_eval($message) if $plugin->can('_eval');
-    is ($msg, $expected_message, 'correct stdout - unicode');
+    $plugin->$event($message);
 }
