@@ -13,7 +13,6 @@ my $horris = Horris::Instance->new([$plugin_name]);
 my $plugin = Horris::Connection::Plugin::Eval->new({
     parent => $horris->{conn}, 
     name => $plugin_name, 
-    $plugin_name => {} # other configuration here
 });
 
 my $conn = Test::MockObject::Extends->new('Horris::Connection');
