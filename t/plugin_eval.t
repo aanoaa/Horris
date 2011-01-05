@@ -22,8 +22,8 @@ $plugin->_connection($conn);
 my $event = 'irc_privmsg';
 
 my %test_message = (
-    'eval: print 1 .. 10;' => '12345678910', 
-    'eval: print "나는미남";' => '나는미남'
+    'eval: print 1 .. 10;' => '12345678910',    # general
+    'eval print "나는미남";' => '나는미남'     # unicode
 );
 
 for my $key (keys %test_message) {
