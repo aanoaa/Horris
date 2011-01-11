@@ -1,6 +1,7 @@
 package Horris::Connection::Plugin::Kspell;
 use Moose;
-use URI::Escape;
+use utf8;
+use Encode 'encode';
 use WebService::KoreanSpeller;
 extends 'Horris::Connection::Plugin';
 with 'MooseX::Role::Pluggable::Plugin';
@@ -30,6 +31,7 @@ sub _kspell {
     }
 
     $raw =~ s/^kspell[\S]*\s+//i;
+    $raw = encode('utf8', $raw) unless utf8::is_utf8($raw);
     my $checker = WebService::KoreanSpeller->new( text=> $raw );
     my @results = $checker->spellcheck;
     my @correct;

@@ -31,7 +31,7 @@ sub _eval {
         return undef;
     }
 
-    $raw =~ s/^eval[\S]*\s+//;
+    $raw =~ s/^eval[\S]*\s+//i;
     $raw = "#!/usr/bin/perl\n" . $raw;
     my $uri = "http://api.dan.co.jp/lleval.cgi?s=" . URI::Escape::uri_escape_utf8($raw);
     my $ua  = LWP::UserAgent->new;
