@@ -1,7 +1,6 @@
 package Horris::Connection::Plugin::Kspell;
 use Moose;
-use utf8;
-use Encode 'encode';
+use Encode qw/encode decode/;
 use WebService::KoreanSpeller;
 extends 'Horris::Connection::Plugin';
 with 'MooseX::Role::Pluggable::Plugin';
@@ -13,10 +12,10 @@ sub irc_privmsg {
 	return unless @msg;
 
     for (@msg) {
-	    $self->connection->irc_privmsg({
-		    channel => $message->channel, 
-		    message => $_
-	    });
+        $self->connection->irc_privmsg({
+            channel => $message->channel, 
+            message => $_
+        });
     }
 
 	return $self->pass;
@@ -31,12 +30,12 @@ sub _kspell {
     }
 
     $raw =~ s/^kspell[\S]*\s+//i;
-    $raw = encode('utf8', $raw) unless utf8::is_utf8($raw);
+    $raw = decode('utf8', $raw);
     my $checker = WebService::KoreanSpeller->new( text=> $raw );
     my @results = $checker->spellcheck;
     my @correct;
     for my $item (@results) {
-        push @correct, $item->{incorrect} . ' -> ' . $item->{correct};
+        push @correct, encode('utf8', $item->{incorrect} . ' -> ' . $item->{correct});
     }
 
     return @correct;
@@ -60,6 +59,6 @@ evaluate perl code
 
 =head1 SEE ALSO
 
-L<http://colabv6.dan.co.jp/lleval.html>
+L<WebService::KoreanSpeller>
 
 =cut
