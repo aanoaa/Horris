@@ -135,6 +135,8 @@ sub occur_event {
 	foreach my $plugin_name (@{ $self->plugins }) {
 		my $plugin = $plugins->{$plugin_name};
 		my $rev = $plugin->$event(@args) if $plugin->can($event);
+
+		# Don't try next plugin for $event if current plugin returns true 
 		last if defined $rev and $rev;
 	}
 }
