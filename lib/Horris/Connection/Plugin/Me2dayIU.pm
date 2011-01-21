@@ -11,14 +11,16 @@ with 'MooseX::Role::Pluggable::Plugin';
 
 sub on_connect {
     warn __PACKAGE__ . " on_connect\n";
-#    my ($self) = shift;
-#    my $timer = AnyEvent->timer (
-#        after => 1,
-#        interval => 1, 
-#        cb => sub {
-#            warn "timeout\n";
-#        }
-#    );
+    my ($self) = shift;
+    my $timer = AnyEvent->timer (
+        after => 1,
+        interval => 1, 
+        cb => sub {
+            warn "timeout\n";
+        }
+    );
+
+	return $self->pass;
 };
 
 sub irc_privmsg {
