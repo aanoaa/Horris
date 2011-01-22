@@ -21,19 +21,15 @@ my @urls = (
     "http://jeen.tistory.com/rss",
     "http://blogs.perl.org/atom.xml",
     "http://planet.perl.org/rss20.xml",
-    "http://ironman.enlightenedperl.org/?feed=atom",
     "http://perlsphere.net/atom.xml",
     "http://use.perl.org/index.rss",
-    "http://blogsearch.google.co.kr/blogsearch_feeds?q=perl+dancer&hl=ko&newwindow=1&prmdo=1&output=rss",
-    "http://blogsearch.google.co.kr/blogsearch_feeds?q=perl+catalyst&hl=ko&newwindow=1&prmdo=1&output=rss",
-    "http://blogsearch.google.co.kr/blogsearch_feeds?q=perl+any+event&hl=ko&newwindow=1&prmdo=1&output=rss",
-    "http://blogsearch.google.co.kr/blogsearch_feeds?q=perl+Moose&hl=ko&newwindow=1&prmdo=1&output=rss",
-    "http://blogsearch.google.co.kr/blogsearch_feeds?q=perl+python&hl=ko&newwindow=1&prmdo=1&output=rss",
+    "http://blogsearch.google.co.kr/blogsearch_feeds?q=perl+dancer+OR+catalyst+OR+anyevent+OR+moose&hl=ko&lr=&newwindow=1&prmdo=1&prmd=ivns&output=atom",
 ); 
 
 my $hs = HTML::Strip->new();
 my $w = AnyEvent->condvar;
 my @feeders;
+my %firstfeed;
 foreach my $url (@urls) {
     my $feed_reader; $feed_reader = AnyEvent::Feed->new (
          url      => $url,
@@ -47,12 +43,21 @@ foreach my $url (@urls) {
                return;
             }
 
+            #warn "$url\n";
+            unless($firstfeed{$feed->link}) {
+                warn "Skip the first feeding. :: $url\n";
+                $firstfeed{$feed->link}++;
+                return;
+            }
+            warn "\n";
+
             #print "feed_reader : $feed_reader\n";
             #print "\tnew_entries : $new_entries\n";
             printf "Added %d entries..\n", scalar @$new_entries;
             for (@$new_entries) {
                 #print Dumper($_);
                 my ($hash, $entry) = @$_;
+
                 my $body = $hs->parse(encode('utf8', $entry->content->body));
                 $body =~ s/[\r\n]//g;
                 $body =~ s/\s+/ /g;
@@ -71,22 +76,5 @@ foreach my $url (@urls) {
 }
 
 $w->recv;
-
-=comment
-use AnyEvent::HTTP;
-use Data::Dumper;
-
-my $seconds = 3;
-
-http_get 'http://cfs.tistory.com/custom/named/je/jeen/rss.xml', sub {
-    print $_[1];
-    my ($body, $hdr) = @_;
-    if ($hdr->{Status} =~ /^2/) {
-        print $body;
-    } else {
-        print "error, $hdr->{Status} $hdr->{Reason}\n";
-    } 
-};
-=cut
 
 1;
