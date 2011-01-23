@@ -7,6 +7,8 @@ use AnyEvent;
 use File::Temp;
 use LWP::Simple;
 use DateTime::Format::W3CDTF;
+use URI;
+use WWW::Shorten 'TinyURL';
 
 my $starttime = scalar time;
 my $lastest_time = 0;
