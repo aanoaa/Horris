@@ -11,7 +11,7 @@ use DateTime::Format::W3CDTF;
 my $starttime = scalar time;
 my $lastest_time = 0;
 my $interval = 60;
-my $json_url = "http://me2day.net/api/get_posts/aanoaa.json";
+my $json_url = "http://me2day.net/api/get_posts/i_u0516.json";
 
 my ($dbfile, $dbh, $sth_insert);
 unless($ENV{NODB}) {
