@@ -1,6 +1,7 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
+use DBI;
 use AnyEvent::Twitter::Stream;
 
 my $consumer_key        = '';
@@ -8,6 +9,10 @@ my $consumer_secret     = '';
 my $access_token        = '';
 my $access_token_secret = '';
 my $track = 'perl,anyevent,catalyst,dancer,plack,psgi';
+
+my $dbfile = 'misc/poll.db';
+my $dbh = DBI->connect("dbi:SQLite:dbname=$dbfile", "", "");
+my $sth_insert = $dbh->prepare("insert into messages values (?, ?, 0, ?)");
 
 my $done = AE::cv;
 
@@ -21,7 +26,7 @@ my $listener = AnyEvent::Twitter::Stream->new(
     track           => $track,
     on_tweet        => sub {
         my $tweet = shift;
-        warn "$tweet->{user}{screen_name}: $tweet->{text}\n";
+        $sth_insert->execute('twitter_stream', scalar time, "$tweet->{user}{screen_name}: $tweet->{text}");
     },
     on_keepalive => sub {
         warn "ping\n";
