@@ -4,14 +4,27 @@ Changes
 v0.0.2
 ------
 
-* "Horris::Connection::Plugin::Twitter"
-  * 테스트 unit 추가
-  * 문서내 https 처리를 내용 추가.
-  * https 처리 안되던 버그수정
-  * 로그에 기록을 남기기 위해 "Notice"로 응답하던 메세지를 "privmsg" 로 변경
-  * priv_msg 중간에 url 이 포함되어도 동작
+### Added(Rewrite) plugins
 
-        hshong: 어쩌고저쩌고 "http://트위터주소" 저쩌고어쩌고
+* Echo
+* Eval
+* Hit
+* Join
+* Kspell
+* PeekURL
+* Poller
+* PowerManager
+* RPC
+* Relay
+* Retry
+* Twitter
+
+### Added CLI(Command Line Interface) tool
+
+* script/app.pl
+  * feed
+  * twitter_stream
+  * me2day_iu
 
 v0.0.1
 ------
