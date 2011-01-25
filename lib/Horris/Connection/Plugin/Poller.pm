@@ -24,6 +24,10 @@ has dbfile => (
     required => 1,
 );
 
+has '+is_enable' => (
+	default => 0
+);
+
 my $w;
 my $dbh;
 my $sth_select;
@@ -38,9 +42,11 @@ sub on_connect {
 
     # create table messages (msg_id text, time int, send int, msg text);
 
+    my $current_time = scalar time;
+
     my $dbfile = $self->dbfile;
     $dbh = DBI->connect("dbi:SQLite:dbname=$dbfile", "", "");
-    $sth_select = $dbh->prepare("SELECT rowid, msg_id, time, send, msg FROM messages WHERE send=0 and time > 1295640655");
+    $sth_select = $dbh->prepare("SELECT rowid, msg_id, time, send, msg FROM messages WHERE send=0 and time > $current_time");
     $sth_update = $dbh->prepare("UPDATE messages SET send=1 WHERE rowid=?");
 
     # Polling $self->dbfile every $interval secs.
@@ -55,27 +61,29 @@ sub on_connect {
             $sth_select->execute;
             foreach my $row (@{ $sth_select->fetchall_arrayref }) {
 
-                warn 'Poller : ' . join(", ", @$row);
+                warn sprintf '[%s] Poller : %s', $self->is_enable ? 'on' : 'off',  join(", ", @$row);
 
-                foreach my $channel (keys %{ $self->channel }) {
-                    for my $feed (@{ $self->channel->{$channel}->{feed} }) {
+                if($self->is_enable) {
+                    foreach my $channel (keys %{ $self->channel }) {
+                        for my $feed (@{ $self->channel->{$channel}->{feed} }) {
 
-                        if($row->[MSG_ID] eq $feed) {
+                            if($row->[MSG_ID] eq $feed) {
 
-                            # drop '\' from channel name
-                            my $cname = substr $channel, 1;
+                                # drop '\' from channel name
+                                my $cname = substr $channel, 1;
 
-                            $self->connection->irc_privmsg({
-                                channel => $cname,
-                                message => $row->[MSG],
-                            });
+                                $self->connection->irc_privmsg({
+                                    channel => $cname,
+                                    message => $row->[MSG],
+                                });
 
-                            if($anti_excess{ scalar time }++ > 3) {
-                                print Dumper(\%anti_excess);
-                                sleep 5;
+                                if($anti_excess{ scalar time }++ > 3) {
+                                    print Dumper(\%anti_excess);
+                                    sleep 5;
+                                }
                             }
-                        }
 
+                        }
                     }
                 }
 
@@ -92,6 +100,28 @@ sub on_disconnect {
     undef $sth_select;
     undef $sth_update;
     undef $dbh;
+}
+
+sub irc_privmsg {
+	my ($self, $message) = @_;
+	my $msg = $message->message;
+	my $botname = $self->connection->nickname;
+	my ($cmd) = $msg =~ m/^$botname\S*\s+(\w+)/;
+	
+	if (defined $cmd and lc $cmd eq 'feed') {
+		$self->_switch;
+		$self->connection->irc_notice({
+			channel => $message->channel, 
+			message => $self->is_enable ? '[feed] on' : '[feed] off'
+		});
+	} elsif ($self->is_enable) {
+		$self->connection->irc_privmsg({
+			channel => $message->channel, 
+			message => $message->from->nickname . ': ' . $msg
+		});
+	}
+
+	return $self->pass;
 }
 
 __PACKAGE__->meta->make_immutable;
