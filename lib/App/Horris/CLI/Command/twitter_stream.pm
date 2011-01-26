@@ -68,7 +68,6 @@ sub execute {
     my $consumer_secret     = $self->key->{consumer_secret};
     my $access_token        = $self->key->{access_token};
     my $access_token_secret = $self->key->{access_token_secret};
-    my $track               = 'perl,anyevent,catalyst,dancer,plack,psgi';
 
     my $dbh = DBI->connect( "dbi:SQLite:dbname=" . $self->database, "", "" );
     my $sth_insert = $dbh->prepare("insert into messages values (?, ?, 0, ?)");
@@ -82,7 +81,7 @@ sub execute {
         token           => $access_token,
         token_secret    => $access_token_secret,
         method          => "filter",
-        track           => $track,
+        track           => $self->track, 
         on_tweet        => sub {
             my $tweet = shift;
             $sth_insert->execute( 'twitter_stream', scalar time,
