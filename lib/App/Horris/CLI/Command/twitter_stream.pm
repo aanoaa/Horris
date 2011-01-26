@@ -85,9 +85,8 @@ sub execute {
         track           => $track,
         on_tweet        => sub {
             my $tweet = shift;
-            print "$tweet->{user}{screen_name}: $tweet->{text}\n";
-            #$sth_insert->execute( 'twitter_stream', scalar time,
-                #"$tweet->{user}{screen_name}: $tweet->{text}" );
+            $sth_insert->execute( 'twitter_stream', scalar time,
+                "$tweet->{user}{screen_name}: $tweet->{text}" );
         },
         on_keepalive => sub {
             warn "ping\n";
