@@ -1,4 +1,27 @@
 package Horris::Connection::Plugin::PeekURL;
+# ABSTRACT: Fetches Links And Display Some Data On It
+
+=head1 SYNOPSIS
+
+  <Config>
+    <Connection whatever>
+      <Plugin PeekURL/> # don't put a space before "/"
+    </Connection>
+  </Config>
+
+=head1 DESCRIPTION
+
+This plugin makes Morris react to messages in the form of http://....
+Morris will fetch the URL, and display some information on it in the
+channel.
+
+If the link is a plain HTML, it will try to find out its title by
+inspecting the content.
+
+If the link is an image, it will display its dimensions.
+
+=cut
+
 use Moose;
 use AnyEvent::HTTP;
 use Encode qw(encode_utf8 decode FB_CROAK);
@@ -185,30 +208,3 @@ sub _get_dirty_title {
 __PACKAGE__->meta->make_immutable;
 
 1;
-
-__END__
-
-=head1 NAME
-
-Morris::Plugin::PeekURL - Fetches Links And Display Some Data On It
-
-=head1 SYNOPSIS
-
-  <Config>
-    <Connection whatever>
-      <Plugin PeekURL/> # don't put a space before "/"
-    </Connection>
-  </Config>
-
-=head1 DESCRIPTION
-
-This plugin makes Morris react to messages in the form of http://....
-Morris will fetch the URL, and display some information on it in the
-channel.
-
-If the link is a plain HTML, it will try to find out its title by
-inspecting the content.
-
-If the link is an image, it will display its dimensions.
-
-=cut

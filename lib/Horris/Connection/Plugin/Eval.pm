@@ -1,4 +1,24 @@
 package Horris::Connection::Plugin::Eval;
+# ABSTRACT: Evaluate Plugin on Horris
+
+=head1 SYNOPSIS
+
+	# assume here at a irc channel
+	HH:MM:SS    NICK | eval print 'hello world'
+	HH:MM:SS BOTNAME | hello world
+	HH:MM:SS    NICK | eval use 5.0.10; say $^V
+	HH:MM:SS BOTNAME | v5.10.1
+
+=head1 DESCRIPTION
+
+Evaluate perl code using L<http://colabv6.dan.co.jp/lleval.html>
+
+=head1 SEE ALSO
+
+L<http://colabv6.dan.co.jp/lleval.html>
+
+=cut
+
 use Moose;
 use JSON;
 use URI::Escape;
@@ -48,21 +68,3 @@ sub _eval {
 __PACKAGE__->meta->make_immutable;
 
 1;
-
-__END__
-
-=pod
-
-=head1 NAME
-
-Horris::Connection::Plugin::Eval
-
-=head1 SYNOPSIS
-
-evaluate perl code
-
-=head1 SEE ALSO
-
-L<http://colabv6.dan.co.jp/lleval.html>
-
-=cut

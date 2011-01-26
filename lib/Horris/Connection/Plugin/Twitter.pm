@@ -1,4 +1,22 @@
 package Horris::Connection::Plugin::Twitter;
+# ABSTRACT: Evaluate Plugin on Horris
+
+=head1 SYNOPSIS
+
+	# assume here at a irc channel
+	HH:MM:SS    NICK | http://twitter.com/#!/umma_coding_bot/status/8721128864350209
+	HH:MM:SS BOTNAME | 엄마코딩봇: 세계가 네 코드를 지켜보고 있단다. 버그 배출을 자제하렴.
+
+=head1 DESCRIPTION
+
+When bot got a twitter url, notice the title.
+
+=head1 SEE ALSO
+
+required L<Crypt::SSLeay> for C<https> connection
+
+=cut
+
 use Moose;
 use HTTP::Request;
 use HTTP::Response;
@@ -57,21 +75,3 @@ sub _parse_status {
 __PACKAGE__->meta->make_immutable;
 
 1;
-
-__END__
-
-=pod
-
-=head1 NAME
-
-Horris::Connection::Plugin::Twitter
-
-=head1 SYNOPSIS
-
-when bot got a twitter url, notice the title.
-
-=head1 SEE ALSO
-
-required L<Crypt::SSLeay> for C<https> connection
-
-=cut

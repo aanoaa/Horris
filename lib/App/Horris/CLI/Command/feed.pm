@@ -1,4 +1,4 @@
-package App::CLI::Horris::Command::feed;
+package App::Horris::CLI::Command::feed;
 # ABSTRACT: something
 
 =head1 SYNOPSIS

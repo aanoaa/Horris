@@ -1,4 +1,12 @@
 package Horris::Message;
+# ABSTRACT: Internal Message Structure For Horris
+
+=head1 SYNOPSIS
+
+    no synopsis
+
+=cut
+
 use Moose;
 use Moose::Util::TypeConstraints;
 use namespace::clean -except => qw(meta);

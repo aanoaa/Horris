@@ -1,4 +1,59 @@
 package Horris::Connection;
+# ABSTRACT: Single IRC Connection
+
+=head1 SYNOPSIS
+
+    use Horris::Connection;
+
+    my $conn = Horris::Connection->new(
+        nickname => $nickname,
+        port     => $port_number,
+        password => $optional_password,
+        server   => $server_name,
+        username => $username,
+		plugins	 => [qw/Foo Bar Baz/], 
+    );
+
+=head1 HOW TO IMPLEMENTS YOUR OWN HOOK METHODS?
+
+=over
+
+=item 1 Make your own Pluggin Module. like a L<Horris::Connection::Plugin::Foo>.
+
+=item 2 check the list what you want to implement event.
+
+=over
+
+=item * on_connect - no args
+
+=item * on_disconnect - no args
+
+=item * on_privatemsg - args with (nickname, Horris::Message)
+
+=item * irc_privmsg - args with (Horris::Message)
+
+=back
+
+=item 3 implements
+
+	sub on_connect {
+		my ($self) = @_;
+		# your stuff here after connected
+	}
+
+=back
+
+    # to send events
+    $conn->irc_notice( { channel => $channel, message => $message } );
+    $conn->irc_privmsg( { channel => $channel, message => $message } );
+    $conn->irc_mode( { channel => $channel, mode => $new_mode, who => $target } );
+
+=head1 DESCRIPTION
+
+C<plugin> - configuration 을 위해 필요하다. 일단 여기까쥐..
+
+=cut
+
 use Moose;
 use AnyEvent::IRC::Client;
 use Const::Fast;
@@ -144,62 +199,3 @@ sub occur_event {
 __PACKAGE__->meta->make_immutable();
 
 1;
-
-__END__
-
-=head1 NAME
-
-Horris::Connection - Single IRC Connection
-
-=head1 SYNOPSIS
-
-    use Horris::Connection;
-
-    my $conn = Horris::Connection->new(
-        nickname => $nickname,
-        port     => $port_number,
-        password => $optional_password,
-        server   => $server_name,
-        username => $username,
-		plugins	 => [qw/Foo Bar Baz/], 
-    );
-
-=head1 HOW TO IMPLEMENTS YOUR OWN HOOK METHODS?
-
-=over
-
-=item 1 Make your own Pluggin Module. like a L<Horris::Connection::Plugin::Foo>.
-
-=item 2 check the list what you want to implement event.
-
-=over
-
-=item * on_connect - no args
-
-=item * on_disconnect - no args
-
-=item * on_privatemsg - args with (nickname, Horris::Message)
-
-=item * irc_privmsg - args with (Horris::Message)
-
-=back
-
-=item 3 implements
-
-	sub on_connect {
-		my ($self) = @_;
-		# your stuff here after connected
-	}
-
-=back
-
-    # to send events
-    $conn->irc_notice( { channel => $channel, message => $message } );
-    $conn->irc_privmsg( { channel => $channel, message => $message } );
-    $conn->irc_mode( { channel => $channel, mode => $new_mode, who => $target } );
-
-=head1 DESCRIPTION
-
-C<plugin> - configuration 을 위해 필요하다. 일단 여기까쥐..
-
-=cut

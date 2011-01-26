@@ -1,4 +1,18 @@
 package App::Horris;
+# ABSTRACT: Command Line Interface For Horris
+
+=head1 SYNOPSIS
+
+    horris --configfile=/path/to/config.conf
+
+=head1 OPTIONS
+
+=head2 configfile
+
+The location to find the config file. The default is /etc/horris.conf
+
+=cut
+
 use Moose;
 use Config::Any;
 use Horris;
@@ -39,21 +53,3 @@ sub config_any_args {
 __PACKAGE__->meta->make_immutable;
 
 1;
-
-__END__
-
-=head1 NAME
-
-App::Horris - Command Line Interface For Horris
-
-=head1 SYNOPSIS
-
-    horris --configfile=/path/to/config.conf
-
-=head1 OPTIONS
-
-=head2 configfile
-
-The location to find the config file. The default is /etc/horris.conf
-
-=cut

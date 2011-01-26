@@ -1,4 +1,23 @@
 package Horris::Connection::Plugin::Join;
+# ABSTRACT: Auto Join Channel Plugin on Horris
+
+=head1 SYNOPSIS
+
+BOT connected IRC, then auto joinning typed(config) channel
+
+	# single channel
+	<Plugin Join>
+		channels [ \#test ] # for a single channel
+	</Plugin>
+
+	# multi channels
+	<Plugin Join>
+		channels #test1
+		channels #test2
+	</Plugin>
+
+=cut
+
 use Moose;
 extends 'Horris::Connection::Plugin';
 with 'MooseX::Role::Pluggable::Plugin';
@@ -17,28 +36,3 @@ sub on_connect {
 __PACKAGE__->meta->make_immutable;
 
 1;
-
-__END__
-
-=pod
-
-=head1 NAME
-
-Horris::Connection::Plugin::Join
-
-=head1 SYNOPSIS
-
-BOT connected IRC, then auto joinning typed(config) channel
-
-	# single channel
-	<Plugin Join>
-		channels [ \#test ] # for a single channel
-	</Plugin>
-
-	# multi channels
-	<Plugin Join>
-		channels #test1
-		channels #test2
-	</Plugin>
-
-=cut

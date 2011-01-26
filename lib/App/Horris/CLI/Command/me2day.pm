@@ -1,4 +1,4 @@
-package App::CLI::Horris::Command::me2day;
+package App::Horris::CLI::Command::me2day;
 
 # ABSTRACT: something
 

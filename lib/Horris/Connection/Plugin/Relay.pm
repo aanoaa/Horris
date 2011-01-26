@@ -1,4 +1,25 @@
 package Horris::Connection::Plugin::Relay;
+# ABSTRACT: Relay Plugin on Horris
+
+=head1 SYNOPSIS
+
+    <Plugin MP::Relay>
+        <From \#perl-kr>
+            Target freenode
+            To \#perl
+            Type privmsg
+        </From>
+    </Plugin>
+
+=head1 DESCRIPTION
+
+Relay
+
+=head1 SEE ALSO
+
+L<AnyEvent::MP>
+
+=cut
 
 use Moose;
 use AnyEvent::MP qw(configure port rcv snd);

@@ -1,4 +1,22 @@
 package Horris::Connection::Plugin::Kspell;
+# ABSTRACT: KoreanSpeller Plugin on Horris
+
+=head1 SYNOPSIS
+
+	# assume here at a irc channel
+	HH:MM:SS    NICK | kspell 키디님
+	HH:MM:SS BOTNAME | 키디님 -> 캐디님
+
+=head1 DESCRIPTION
+
+Checking Korean Spell and Fixed It As Right
+
+=head1 SEE ALSO
+
+L<WebService::KoreanSpeller>
+
+=cut
+
 use Moose;
 use Encode qw/encode decode/;
 use WebService::KoreanSpeller;
@@ -44,21 +62,3 @@ sub _kspell {
 __PACKAGE__->meta->make_immutable;
 
 1;
-
-__END__
-
-=pod
-
-=head1 NAME
-
-Horris::Connection::Plugin::Kspell
-
-=head1 SYNOPSIS
-
-evaluate perl code
-
-=head1 SEE ALSO
-
-L<WebService::KoreanSpeller>
-
-=cut

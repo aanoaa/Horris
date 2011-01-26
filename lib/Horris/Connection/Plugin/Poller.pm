@@ -1,4 +1,16 @@
 package Horris::Connection::Plugin::Poller;
+# ABSTRACT: Poller Plugin on Horris
+
+=head1 SYNOPSIS
+
+    yuni++
+
+=head1 DESCRIPTION
+
+yuni++
+
+=cut
+
 use Moose;
 use DBI;
 use Data::Dumper;

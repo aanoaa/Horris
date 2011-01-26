@@ -1,5 +1,4 @@
-package App::CLI::Horris::Command::twitter_stream;
-
+package App::Horris::CLI::Command::twitter_stream;
 # ABSTRACT: anyevent twitter streaming script
 
 =head1 SYNOPSIS

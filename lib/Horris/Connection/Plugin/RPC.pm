@@ -1,4 +1,16 @@
 package Horris::Connection::Plugin::RPC;
+# ABSTRACT: RPC Plugin on Horris
+
+=head1 SYNOPSIS
+
+	still implements
+
+=head1 DESCRIPTION
+
+still implements
+
+=cut
+
 use Moose;
 use AnyEvent::MP qw(configure port rcv);
 use AnyEvent::MP::Global qw(grp_reg);
@@ -27,17 +39,3 @@ after init => sub {
 __PACKAGE__->meta->make_immutable;
 
 1;
-
-__END__
-
-=pod
-
-=head1 NAME
-
-Horris::Connection::Plugin::RPC
-
-=head1 SYNOPSIS
-
-	still implements
-
-=cut
