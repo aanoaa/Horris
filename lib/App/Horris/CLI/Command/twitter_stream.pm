@@ -9,27 +9,19 @@ package App::Horris::CLI::Command::twitter_stream;
 
 F<$HOME/.twitter_key> sample
 
-    "Consumer key"              cosumer key here
-    "Consumer secret"           cosumer secret here
-    "Access Token"              access token here           # oauth_token
-    "Access Token Secret"       access token secret here    # (oauth_token_secret)
+    consumer_key              cosumer key here
+    consumer_secret           cosumer secret here
+    access_token              access token here           # oauth_token
+    access_token_secret       access token secret here    # (oauth_token_secret)
 
 =cut
 
 use Moose;
-use Moose::Util::TypeConstraints;
 use Config::General qw/ParseConfig/;
 use DBI;
 use AnyEvent::Twitter::Stream;
 use namespace::autoclean;
 extends 'MooseX::App::Cmd::Command';
-
-subtype 'Config::General'
-    => as 'Config::General';
-
-coerce 'Config::General'
-    => from 'Str'
-    => via { ParseConfig($_) };
 
 has database => (
     is            => 'ro',
@@ -39,12 +31,11 @@ has database => (
     documentation => "sqlite3 database file",
 );
 
-has key => (
+has key_config => (
     is          => 'rw',
-    isa         => 'Config::General',
+    isa         => 'Str', 
     traits      => ['Getopt'],
-    default     => "$ENV{HOME}/.twitter_key",
-    coerce      => 1,
+    default     => "$ENV{HOME}/.twitter_key", 
     cmd_aliases => 'k',
     documentation =>
       "twitter api key file. default using $ENV{HOME}/.twitter_key",
@@ -59,13 +50,24 @@ has track => (
     documentation => "tracking keywords",
 );
 
+has key => (
+    is          => 'rw',
+    isa         => 'HashRef', 
+    lazy_build  => 1
+);
+
+sub _build_key {
+    my $self = shift;
+    return { ParseConfig($self->key_config) };
+}
+
 sub execute {
     my ( $self, $opt, $args ) = @_;
 
-    my $consumer_key        = $self->key->{"Consumer key"};
-    my $consumer_secret     = $self->key->{"Consumer secret"};
-    my $access_token        = $self->key->{"Access Token"};
-    my $access_token_secret = $self->key->{"Access Token Secret"};
+    my $consumer_key        = $self->key->{consumer_key};
+    my $consumer_secret     = $self->key->{consumer_secret};
+    my $access_token        = $self->key->{access_token};
+    my $access_token_secret = $self->key->{access_token_secret};
     my $track               = 'perl,anyevent,catalyst,dancer,plack,psgi';
 
     my $dbh = DBI->connect( "dbi:SQLite:dbname=" . $self->database, "", "" );
