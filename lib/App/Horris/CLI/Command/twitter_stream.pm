@@ -84,8 +84,16 @@ sub execute {
         track           => $self->track, 
         on_tweet        => sub {
             my $tweet = shift;
-            $sth_insert->execute( 'twitter_stream', scalar time,
-                "$tweet->{user}{screen_name}: $tweet->{text}" );
+
+            my $text = $tweet->{text};
+            my @chars = split //, $text;
+
+            my $cnt = 0;
+            map { $cnt++ if /[\p{Hangul}\p{Hiragana}\p{Katakana}\p{Latin}\p{Common}]/; } @chars;
+            if($cnt / scalar @chars > 0.5 and $tweet->{user}{screen_name} !~ m/perlism/i) {
+                $sth_insert->execute( 'twitter_stream', scalar time,
+                    "$tweet->{user}{screen_name}: $tweet->{text}" );
+            }
         },
         on_keepalive => sub {
             warn "ping\n";
