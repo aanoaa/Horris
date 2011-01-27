@@ -126,11 +126,6 @@ sub irc_privmsg {
 			channel => $message->channel, 
 			message => $self->is_enable ? '[feed] on' : '[feed] off'
 		});
-	} elsif ($self->is_enable) {
-		$self->connection->irc_privmsg({
-			channel => $message->channel, 
-			message => $message->from->nickname . ': ' . $msg
-		});
 	}
 
 	return $self->pass;
