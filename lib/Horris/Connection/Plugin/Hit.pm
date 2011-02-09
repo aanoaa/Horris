@@ -11,7 +11,7 @@ package Horris::Connection::Plugin::Hit;
 	HH:MM:SS    NICK | BOTNAME dis NICK
 	HH:MM:SS BOTNAME | NICK: #@!##$@!@#(random dis message, you can type dis message to configuration file)
 
-	# also you can send a dis message hide behind the BOT(aka Anonymous)
+	# also you can send a dis message hide behind the BOT
 	HH:MM:SS    NICK | /msg BOTNAME dis NICK OH! SHIT!
 	HH:MM:SS BOTNAME | NICK: OH! SHIT!
 
