@@ -9,7 +9,7 @@ package Horris::Connection::Plugin::Twitter;
 
 =head1 DESCRIPTION
 
-When bot got a twitter url, notice the title.
+When bot got a twitter url, Notice the title.
 
 =head1 SEE ALSO
 
