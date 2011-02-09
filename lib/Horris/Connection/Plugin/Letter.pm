@@ -13,7 +13,7 @@ package Horris::Connection::Plugin::Letter;
 
 =head1 SEE ALSO
 
-Acme::Letter
+L<Acme::Letter>
 
 =cut
 
