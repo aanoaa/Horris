@@ -11,7 +11,7 @@ package Horris::Connection::Plugin::Hit;
 	HH:MM:SS    NICK | BOTNAME dis NICK
 	HH:MM:SS BOTNAME | NICK: #@!##$@!@#(random dis message, you can type dis message to configuration file)
 
-	# also you can send a dis message hide behind the BOT(aka Anonymous)
+	# also you can send a dis message hide behind the BOT
 	HH:MM:SS    NICK | /msg BOTNAME dis NICK OH! SHIT!
 	HH:MM:SS BOTNAME | NICK: OH! SHIT!
 
@@ -48,15 +48,24 @@ sub irc_privmsg {
 	my ($self, $message) = @_;
 	my $msg = $message->message;
 	my $botname = $self->connection->nickname;
-	if (my ($nick, $typed) = $msg =~ m/^$botname\S*\s+[(:?dis|hit)]+\s+(\w+)\s*(.*)$/i) {
-		my $output = $nick . ': ';
-		$output .= $typed eq '' ? $self->texts->[int(rand(scalar @{ $self->texts }))] : $typed;
-		$self->connection->irc_privmsg({
-			channel => $message->channel, 
-			message => $output
-		});
-	}
-	return $self->pass;
+
+    my ($output, $nick, $typed);
+    if (($nick, $typed) = $msg =~ m/^(\w+)\S*\s+껒$/i) {
+        $output = $message->nickname . ': ';
+        $output .= sprintf("%s - %s",  'ㅁㅁ?', 'http://tinyurl.com/5t3ew8t');
+    } elsif (($nick, $typed) = $msg =~ m/^$botname\S*\s+[(:?dis|hit)]+\s+(\w+)\s*(.*)$/i) {
+        $output = $nick . ': ';
+        $output .= $typed eq '' ? $self->texts->[int(rand(scalar @{ $self->texts }))] : $typed;
+    } else {
+        return $self->pass;
+    }
+
+    $self->connection->irc_privmsg({
+        channel => $message->channel, 
+        message => $output
+    });
+
+    return $self->pass;
 }
 
 sub on_privatemsg {

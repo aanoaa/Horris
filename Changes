@@ -1,7 +1,12 @@
 Changes
 =======
 
-v0.1.0
+v0.1.1
+------
+
+* Added `ㅁㅁ` feature to plugin 'Hit'
+
+0.1.0
 ------
 
 ### Added(Rewrite) plugins
@@ -26,7 +31,7 @@ v0.1.0
   * twitter_stream
   * me2day_iu
 
-v0.0.1
+0.0.1
 ------
 
 * 개인적인 공부 목적으로 fork
