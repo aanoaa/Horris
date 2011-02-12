@@ -1,7 +1,8 @@
 Revision history for Horris
 
-Changes
-=======
+v0.1.2  2011-02-12
+    * re Documenting
+    * merge CLI scripts
 
 v0.1.1  2011-02-11
     * Added "what's that"(a.k.a '뭠마' || 'ㅁㅁ') feature to 'Hit plugin'
