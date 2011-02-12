@@ -1,3 +1,12 @@
 #!/usr/bin/env perl
+package horris;
+# ABSTRACT: App::Horris::CLI runner
+
+=head1 SYNOPSIS
+
+    horris
+
+=cut
+
 use App::Horris::CLI;
 App::Horris::CLI->run;
