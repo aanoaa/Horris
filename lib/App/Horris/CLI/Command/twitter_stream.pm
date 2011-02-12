@@ -4,6 +4,11 @@ package App::Horris::CLI::Command::twitter_stream;
 =head1 SYNOPSIS
 
     sample code base here
+    horris twitter_stream --database /path/to/poll.db
+
+following command for more detail.
+
+    horris help twitter_stream
 
 =head1 DESCRIPTION
 
@@ -53,6 +58,7 @@ has track => (
 has key => (
     is          => 'rw',
     isa         => 'HashRef', 
+    traits        => ['NoGetopt'],
     lazy_build  => 1
 );
 

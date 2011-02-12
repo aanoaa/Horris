@@ -3,13 +3,41 @@ package Horris;
 
 =head1 SYNOPSIS
 
-    my $app = new App::Horris->new_with_options(); # require config file
-    my $horris = new Horris({ config => $app->config });
+    use Horris;
+    my $config = {
+        'network' => {
+            'freenode' => {
+                'nickname' => 'botname',
+                'server' => 'irc.freenode.net',
+                'port' => '6667',
+                'username' => 'botname'
+            }
+        },
+        'connection' => {
+            'freenode' => {
+                'plugin' => {
+                    'Join' => {
+                        'channels' => [
+                            '#channel-name', 
+                        ]
+                    },
+                    'Twitter' => {},
+                }, 
+                'network' => 'freenode',
+                'loadmodule' => [
+                    'Twitter',
+                    'Join',
+                ]
+            }
+        }
+    };
+
+    my $horris = Horris->new(config => $config);
     $horris->run;
 
 or
 
-    App::Horris->new_with_options->run;    # more general, 'App::Horris::run' calls 'Horris::run' automatically
+    horris run --configfile /path/to/config.conf        # more general
 
 below shows some feature of Horris.
 
