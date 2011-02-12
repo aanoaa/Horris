@@ -1,45 +1,33 @@
+Revision history for Horris
+
 Changes
 =======
 
-v0.1.1
-------
-
-* Added `ㅁㅁ` feature to plugin 'Hit'
+v0.1.1  2011-02-11
+    * Added "what's that"(a.k.a '뭠마' || 'ㅁㅁ') feature to 'Hit plugin'
 
 0.1.0
-------
-
-### Added(Rewrite) plugins
-
-* Echo
-* Eval
-* Hit
-* Join
-* Kspell
-* PeekURL
-* Poller
-* PowerManager
-* RPC
-* Relay
-* Retry
-* Twitter
-
-### Added CLI(Command Line Interface) tool
-
-* script/app.pl
-  * feed
-  * twitter_stream
-  * me2day_iu
+    * Rewrite plugins
+        * Join
+        * PeekURL
+        * Poller
+        * Relay
+    * Added plugins
+        * Echo
+        * Eval
+        * Hit
+        * Kspell
+        * PowerManager
+        * RPC
+        * Retry
+        * Twitter
+    * Added CLI utility
 
 0.0.1
-------
-
-* 개인적인 공부 목적으로 fork
-* 프로젝트명 "Horris"로 변경
-* 적극적으로 한글사용
-  * 내가 영어를 못해서.. ;ㅁ;
-* plugin 변경
-  "MooseX::Role::Pluggable" 사용
+    * forked 'Morris'
+    * given name 'Horris'
+    * replace pluggable logic
+        self implementation => "MooseX::Role::Pluggable"
 
 0.01000_02
     * Fix PeekURL plugin's regular expression to search for charsets
