@@ -1,14 +1,13 @@
 package App::Horris::CLI::Command::me2day;
-
-# ABSTRACT: something
+# ABSTRACT: me2day Watcher
 
 =head1 SYNOPSIS
 
-    code base here
+    horris feed --database /path/to/poll.db
 
-=head1 DESCRIPTION
+following command for more detail.
 
-Description here
+    horris help me2day
 
 =cut
 

@@ -3,11 +3,11 @@ package Horris::Connection::Plugin::RPC;
 
 =head1 SYNOPSIS
 
-	still implements
+Not yet implemented.
 
 =head1 DESCRIPTION
 
-still implements
+Not yet implemented.
 
 =cut
 

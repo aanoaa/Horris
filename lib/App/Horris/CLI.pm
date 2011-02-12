@@ -3,7 +3,7 @@ package App::Horris::CLI;
 
 =head1 SYNOPSIS
 
-    script/app.pl
+    horris
     # output all available command list & help
 
 =cut
