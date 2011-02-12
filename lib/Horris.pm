@@ -1,47 +1,105 @@
 package Horris;
-# ABSTRACT: An IRC Bot Based On Moose/AnyEvent - forked Morris
+# ABSTRACT: An IRC Bot Based On Moose/AnyEvent - forked L<Morris>
 
 =head1 SYNOPSIS
 
-	my $app = new App::Horris->new_with_options(); # require config file
-	my $horris = new Horris({ config => $app->config });
-	$horris->run;
+    my $app = new App::Horris->new_with_options(); # require config file
+    my $horris = new Horris({ config => $app->config });
+    $horris->run;
 
-	or
+or
 
-	App::Horris->new_with_options->run;    # more general, 'App::Horris::run' calls 'Horris::run' automatically
+    App::Horris->new_with_options->run;    # more general, 'App::Horris::run' calls 'Horris::run' automatically
+
+below shows some feature of Horris.
+
+    ### assume here at a irc channel & hongbot is horris bot, hshong is me.
+    ### echo
+    HH:MM:SS  hshong | hongbot echo
+    HH:MM:SS      -- | Notice(hongbot) echo on
+    HH:MM:SS  hshong | hi
+    HH:MM:SS hongbot | hshong: hi
+    HH:MM:SS  hshong | hongbot echo
+    HH:MM:SS      -- | Notice(hongbot) echo off
+    HH:MM:SS  hshong | hi                           # and no echo here..
+    ### evaluate
+    HH:MM:SS  hshong | eval print 'hello world'
+    HH:MM:SS hongbot | hello world
+    HH:MM:SS  hshong | eval print $^V
+    HH:MM:SS hongbot | v5.10.1
+    ### hit(cute joke)
+    HH:MM:SS  hshong | hongbot hit hshong
+    HH:MM:SS hongbot | hshong: fork you
+    HH:MM:SS  hshong | hongbot hit hshong
+    HH:MM:SS hongbot | hshong: http://stfuawsc.com
+    HH:MM:SS  hshong | jeen: 껒
+    HH:MM:SS hongbot | hshong: ㅁㅁ? - http://tinyurl.com/5t3ew8t
+    ### letter - Acme::Letter
+    HH:MM:SS  hshong | letter bye
+    HH:MM:SS hongbot |  _____ _    _ _____
+    HH:MM:SS hongbot | |  _  \ \  / /  ___|
+    HH:MM:SS hongbot | | |_)_/\_\/_/| |__
+    HH:MM:SS hongbot | | |_) \  | | | |___
+    HH:MM:SS hongbot | |_____/  |_| |_____|
+    ### PeekURL
+    HH:MM:SS  hshong | http://sports.media.daum.net/baseball/news/breaking/view.html?cateid=1028&newsid=20110211110523268&p=SpoSeoul
+    HH:MM:SS      -- | Notice(hongbot): Daum 스포츠 [text/html;charset=UTF-8] - http://tinyurl.com/4rs9afr
+    ### Twitter
+    HH:MM:SS  hshong | http://twitter.com/#!/umma_coding_bot/status/8721128864350209
+    HH:MM:SS hongbot | 엄마코딩봇: 세계가 네 코드를 지켜보고 있단다. 버그 배출을 자제하렴.
+    ### kspell - KoreanSpellChecker
+    HH:MM:SS  hshong | kspell 키디님
+    HH:MM:SS hongbot | 키디님 -> 케디님
+    ### Relay chat messages from other networks
+    HH:MM:SS hongbot | <other_irc_server_hshong> i'm here
+    ### PowerManagement
+    HH:MM:SS    NICK | hongbot quit
+    HH:MM:SS     <-- | hongbot (nick@some.host) has quit (Remote host closed the connection)
 
 =head1 DESCRIPTION
 
-C<config> - HashRef
+L<Morris> is awesome.
+L<Horris> stolen L<Morris>'s idea, documents, code base, plugin and so on. (everything)
+L<Morris> has self implemeted pluggable process. but L<Horris> is not.
+
+<Horris> is <Morris> + CLI utility + More Simple plugins.
+
+This documents concentrate I<How to use> instead I<What it is>.
+because you can also seeing L<Morris>.
+
+=head1 BASIC CONFIGURATION
 
     <Config>
-	    <Connection freenode>
-		    Network freenode
-		    LoadModule Foo
-		    LoadModule Bar
-		    <Plugin Foo>
-			    key     value       # ArrayRef expression
-			    key     value
-            </Plugin>
-		    <Plugin Bar/>           # no args
-	    </Connection>
-	    <Network freenode>
-		    Server         irc.freenode.net
-		    Port           6667
-		    Username       yourname
-		    Nickname       yournickname
-	    </Network>
+      <Connection YourConnectionName>
+        Network YourNetworkName
+        ... LoadModules ...
+        ... plugins ...
+      </Connection>
+
+      <Network YourNetworkName>
+        ... network config ...
+      </Network>
     </Config>
 
-C<LoadModule> - 먼저 정의된 plugin 이 우선순위를 가집니다.
-모든 이벤트에 대해 우선순위대로 실행되며 각각의 plugin은 다음 plugin 으로 이벤트를
-넘겨 줄지 여부를 결정할 수 있습니다. config에 LoadModule이 정의되어 있지 않으면,
-초기화 되지 않고 이벤트에 반응하지 않습니다.
+=head2 Connection CLAUSE
+
+    <Connection YourConnectionName>
+        LoadModule  Echo
+        LoadModule  PeekURL
+        LoadModule  Twitter
+        <Plugin Echo/>
+        <Plugin PeekURL/>
+        <Plugin Twitter/>
+    </Connection>
+
+LoadModule has execute priority.
+First in first out.
+Each plugin return boolean value when a event occur.
+If any plugin return false, lower plugins never processing occured event.
 
 =head1 SEE ALSO
 
-L<App::Horris> L<horris>
+L<Morris>
 
 =cut
 
@@ -54,56 +112,56 @@ use namespace::clean -except => qw/meta/;
 const our $DEBUG => $ENV{PERL_HORRIS_DEBUG};
 
 has condvar => (
-	is => 'ro', 
-	lazy_build => 1, 
+    is => 'ro', 
+    lazy_build => 1, 
 );
 
 has connections => (
-	traits => ['Array'],
-	is => 'ro', 
-	isa => 'ArrayRef[Horris::Connection]', 
-	lazy_build => 1, 
-	handles => {
-		all_connections => 'elements', 
-		push_connection => 'push', 
-	}, 
+    traits => ['Array'],
+    is => 'ro', 
+    isa => 'ArrayRef[Horris::Connection]', 
+    lazy_build => 1, 
+    handles => {
+        all_connections => 'elements', 
+        push_connection => 'push', 
+    }, 
 );
 
 has config => (
-	is => 'ro', 
-	isa => 'HashRef', 
-	required => 1, 
+    is => 'ro', 
+    isa => 'HashRef', 
+    required => 1, 
 );
 
 sub _build_condvar { AnyEvent->condvar }
 sub _build_connections {
-	my ($self) = @_;
-	my @connections;
-	while (my ($name, $conn) = each %{$self->{config}{connection}}) {
-		confess "No network specified for connection '$name'" unless $conn->{network};
-		print "Connection Name: $name\n" if $Horris::DEBUG;
+    my ($self) = @_;
+    my @connections;
+    while (my ($name, $conn) = each %{$self->{config}{connection}}) {
+        confess "No network specified for connection '$name'" unless $conn->{network};
+        print "Connection Name: $name\n" if $Horris::DEBUG;
 
-		my $network = $self->{config}{network}->{ $conn->{network} };
-		my $connection = Horris::Connection->new({
-			%$network,
-			%$conn,
-			plugins => $conn->{loadmodule} ? $conn->{loadmodule} : [], 
-		});
-		push @connections, $connection;
-	}
+        my $network = $self->{config}{network}->{ $conn->{network} };
+        my $connection = Horris::Connection->new({
+            %$network,
+            %$conn,
+            plugins => $conn->{loadmodule} ? $conn->{loadmodule} : [], 
+        });
+        push @connections, $connection;
+    }
 
-	return \@connections;
+    return \@connections;
 }
 
 sub run {
-	my $self = shift;
-	my $cv = $self->condvar;
-	$cv->begin;
-	foreach my $conn ($self->all_connections) {
-		$conn->run;
-	}
+    my $self = shift;
+    my $cv = $self->condvar;
+    $cv->begin;
+    foreach my $conn ($self->all_connections) {
+        $conn->run;
+    }
 
-	$cv->recv;
+    $cv->recv;
 }
 
 __PACKAGE__->meta->make_immutable;
