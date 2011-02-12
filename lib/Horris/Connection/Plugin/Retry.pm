@@ -1,11 +1,6 @@
 package Horris::Connection::Plugin::Retry;
 # ABSTRACT: Auto Reconnect Plugin on Horris
 
-=head1 SYNOPSIS
-
-    no synopsis
-    luzluna++
-
 =head1 DESCRIPTION
 
 Auto Reconnect when Disconnected
