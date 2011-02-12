@@ -1,24 +1,23 @@
-package App::Horris;
-# ABSTRACT: Command Line Interface For Horris
+package App::Horris::CLI::Command::run;
+# ABSTRACT: Horris runner
 
 =head1 SYNOPSIS
 
-    horris --configfile=/path/to/config.conf
+    horris run --configfile /path/to/botname.conf
 
 =head1 OPTIONS
 
 =head2 configfile
 
-The location to find the config file. The default is /etc/horris.conf
+The location to find the config file. The default path is /etc/horris.conf
 
 =cut
 
 use Moose;
-use Config::Any;
 use Horris;
-use namespace::clean -except => qw/meta/;
-
-with qw/MooseX::Getopt MooseX::SimpleConfig/;
+use namespace::autoclean;
+extends 'MooseX::App::Cmd::Command';
+with qw/MooseX::SimpleConfig/;
 
 has '+configfile' => (
 	default => '/etc/horris.conf'
@@ -34,12 +33,6 @@ around _usage_format => sub {
 	return "usage: %c %o (run 'perldoc " . __PACKAGE__ . "' for more info)";
 };
 
-sub run {
-	my $self = shift;
-	my $horris = Horris->new(config => $self->config);
-	$horris->run;
-}
-
 sub config_any_args {
 	return {
 		driver_args => {
@@ -50,6 +43,10 @@ sub config_any_args {
 	};
 }
 
-__PACKAGE__->meta->make_immutable;
+sub execute {
+    my ( $self, $opt, $args ) = @_;
+	my $horris = Horris->new(config => $self->config);
+	$horris->run;
+}
 
 1;

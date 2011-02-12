@@ -1,13 +1,13 @@
 package App::Horris::CLI::Command::feed;
-# ABSTRACT: something
+# ABSTRACT: rss feed update and notify
 
 =head1 SYNOPSIS
 
-    code base here
+    horris feed --database /path/to/poll.db
 
-=head1 DESCRIPTION
+following command for more detail.
 
-Description here
+    horris help feed
 
 =cut
 
