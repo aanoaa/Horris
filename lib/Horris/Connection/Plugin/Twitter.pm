@@ -1,5 +1,5 @@
 package Horris::Connection::Plugin::Twitter;
-# ABSTRACT: Evaluate Plugin on Horris
+# ABSTRACT: Twitter Plugin on Horris
 
 =head1 SYNOPSIS
 

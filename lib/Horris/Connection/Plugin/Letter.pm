@@ -1,5 +1,5 @@
 package Horris::Connection::Plugin::Letter;
-# ABSTRACT: Evaluate Plugin on Horris
+# ABSTRACT: Acme::Letter Plugin on Horris
 
 =head1 SYNOPSIS
 
