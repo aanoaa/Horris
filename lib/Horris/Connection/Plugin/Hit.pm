@@ -56,6 +56,9 @@ sub irc_privmsg {
     } elsif (($nick, $typed) = $msg =~ m/^$botname\S*\s+[(:?dis|hit)]+\s+(\w+)\s*(.*)$/i) {
         $output = $nick . ': ';
         $output .= $typed eq '' ? $self->texts->[int(rand(scalar @{ $self->texts }))] : $typed;
+    } elsif(($nick) = $msg =~ m/^(\w+)\-\-$/) {
+        $output = $nick . ': ';
+        $output .= $self->texts->[int(rand(scalar @{ $self->texts }))];
     } else {
         return $self->pass;
     }
