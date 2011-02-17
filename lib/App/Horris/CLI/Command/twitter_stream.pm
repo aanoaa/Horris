@@ -69,6 +69,7 @@ sub _build_key {
 
 sub execute {
     my ( $self, $opt, $args ) = @_;
+    die $self->usage if ($opt->{help_flag});
 
     my $consumer_key        = $self->key->{consumer_key};
     my $consumer_secret     = $self->key->{consumer_secret};
