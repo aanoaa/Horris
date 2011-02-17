@@ -1,47 +1,50 @@
 Revision history for Horris
 
-0.1.3   2011-02-16
-    * Added `nick--` feature to 'Hit' plugin
+0.1.5   2011-02-17
+    - Fixed CLI '-?' (help_flag) options bug
+
+0.1.4   2011-02-16
+    - Added `nick--` feature to 'Hit' plugin
 
 0.1.3   2011-02-13
-    * typo
+    - typo
 
 v0.1.2  2011-02-12
-    * re Documenting
-    * merge CLI scripts
+    - re Documenting
+    - merge CLI scripts
 
 v0.1.1  2011-02-11
-    * Added "what's that"(a.k.a '뭠마' || 'ㅁㅁ') feature to 'Hit plugin'
+    - Added "what's that"(a.k.a '뭠마' || 'ㅁㅁ') feature to 'Hit plugin'
 
 0.1.0
-    * Rewrite plugins
-        * Join
-        * PeekURL
-        * Poller
-        * Relay
-    * Added plugins
-        * Echo
-        * Eval
-        * Hit
-        * Kspell
-        * PowerManager
-        * RPC
-        * Retry
-        * Twitter
-    * Added CLI utility
+    - Rewrite plugins
+        - Join
+        - PeekURL
+        - Poller
+        - Relay
+    - Added plugins
+        - Echo
+        - Eval
+        - Hit
+        - Kspell
+        - PowerManager
+        - RPC
+        - Retry
+        - Twitter
+    - Added CLI utility
 
 0.0.1
-    * forked 'Morris'
-    * given name 'Horris'
-    * replace pluggable logic
+    - forked 'Morris'
+    - given name 'Horris'
+    - replace pluggable logic
         self implementation => "MooseX::Role::Pluggable"
 
 0.01000_02
-    * Fix PeekURL plugin's regular expression to search for charsets
+    - Fix PeekURL plugin's regular expression to search for charsets
 
 0.01000_01 - 11 Nov 2009
-    * First public release (it's been used in production in my company
+    - First public release (it's been used in production in my company
       for over a year)
-    * Please note that this was intended as a toy... Patches, improvements
+    - Please note that this was intended as a toy... Patches, improvements
       are welcome.
-    * Also, some parts are hardcoded with Japanese text. You've been warned.
+    - Also, some parts are hardcoded with Japanese text. You've been warned.

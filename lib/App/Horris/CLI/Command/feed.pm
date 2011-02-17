@@ -52,6 +52,7 @@ has interval => (
 
 sub execute {
     my ( $self, $opt, $args ) = @_;
+    die $self->usage if ($opt->{help_flag});
 
     my $dbh = DBI->connect( "dbi:SQLite:dbname=" . $self->database, "", "" );
     my $sth_insert = $dbh->prepare("insert into messages values (?, ?, 0, ?)");

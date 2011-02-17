@@ -53,6 +53,7 @@ has interval => (
 
 sub execute {
     my ( $self, $opt, $args ) = @_;
+    die $self->usage if ($opt->{help_flag});
 
     my $dbh;
     my $sth_insert;
