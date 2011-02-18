@@ -1,19 +1,22 @@
 Revision history for Horris
 
-0.1.5   2011-02-17
+0.1.5_99    2011-02-18
+    - Added eng2kor feautre, but have to write test script
+
+0.1.5       2011-02-17
     - Fixed CLI '-?' (help_flag) options bug
 
-0.1.4   2011-02-16
+0.1.4       2011-02-16
     - Added `nick--` feature to 'Hit' plugin
 
-0.1.3   2011-02-13
+0.1.3       2011-02-13
     - typo
 
-v0.1.2  2011-02-12
+v0.1.2      2011-02-12
     - re Documenting
     - merge CLI scripts
 
-v0.1.1  2011-02-11
+v0.1.1      2011-02-11
     - Added "what's that"(a.k.a '뭠마' || 'ㅁㅁ') feature to 'Hit plugin'
 
 0.1.0
