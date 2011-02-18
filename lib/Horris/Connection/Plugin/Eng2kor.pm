@@ -51,8 +51,31 @@ sub _eng2kor {
     $raw =~ s/^eng2kor[\S]*\s+//i;
     $raw = decode('utf8', $raw);
     my %options;
-    local @ARGV = split /\s+/, $raw;
-    warn "@ARGV\n";
+
+    $raw =~ s/^\s+//;
+    $raw =~ s/\s+$//;
+    local @ARGV;
+    while (my ($m) = $raw =~ m/(['"]|\s+)/) {
+        my $i = index($raw, $m);
+        my $arg;
+        if ($m eq "'" or $m eq '"') {
+            my $pair = index($raw, $m, $i + 1);
+            if ($pair == -1) {
+                warn "Couldn't match pair\n";
+                return ();
+            }
+
+            $arg = substr($raw, $i + 1, $pair - 1);
+            $raw = substr($raw, $pair + 1);
+        } else {
+            $arg = substr($raw, 0, $i);
+            $raw = substr($raw, $i + 1);
+        }
+
+        push @ARGV, $arg if $arg;
+    }
+
+    push @ARGV, $raw if $raw;
     GetOptions( \%options, "--src=s", "--dst=s", "--reverse", "--help", "--list" );
     my $src = $options{src} || $ENV{E2K_SRC} || 'en';
     my $dst = $options{dst} || $ENV{E2K_DST} || 'ko';
