@@ -3,9 +3,9 @@ package Horris::Connection::Plugin::Twitter;
 
 =head1 SYNOPSIS
 
-	# assume here at a irc channel
-	HH:MM:SS    NICK | http://twitter.com/#!/umma_coding_bot/status/8721128864350209
-	HH:MM:SS BOTNAME | 엄마코딩봇: 세계가 네 코드를 지켜보고 있단다. 버그 배출을 자제하렴.
+    # assume here at a irc channel
+    HH:MM:SS    NICK | http://twitter.com/#!/umma_coding_bot/status/8721128864350209
+    HH:MM:SS BOTNAME | 엄마코딩봇: 세계가 네 코드를 지켜보고 있단다. 버그 배출을 자제하렴.
 
 =head1 DESCRIPTION
 
@@ -25,51 +25,55 @@ extends 'Horris::Connection::Plugin';
 with 'MooseX::Role::Pluggable::Plugin';
 
 sub irc_privmsg {
-	my ($self, $message) = @_;
-	my $msg = $self->_parse_status($message);
+    my ($self, $message) = @_;
+    my $msg = $self->_parse_status($message);
 
-	return $self->pass unless defined $msg;
+    return $self->pass unless defined $msg;
 
     for my $m (split(/\n/, $msg)) {
-	    $self->connection->irc_privmsg({
-		    channel => $message->channel, 
-		    message => $m
-	    });
+        $self->connection->irc_privmsg({
+            channel => $message->channel,
+            message => $m
+        });
     }
 
-	return $self->done;
+    return $self->done;
 }
 
 sub _parse_status {
-	my ($self, $message) = @_;
-	my $raw = $message->message;
-	$raw =~ s/#!\///;
+    my ($self, $message) = @_;
+    my $raw = $message->message;
+    $raw =~ s/#!\///;
     my $url;
-	unless (($url) = $raw =~ m{(https?://(:?.*)twitter\.com/(:?[^/]+)/st\w+/[0-9]+)}) { # status, statuses
-		return undef;
-	}
+    unless (($url) = $raw =~ m{(https?://(:?.*)twitter\.com/(:?[^/]+)/st\w+/[0-9]+)}) { # status, statuses
+        return undef;
+    }
 
-	print "recv Twitter URI\n" if $Horris::DEBUG;
+    print "recv Twitter URI\n" if $Horris::DEBUG;
 
-	my ($msg, $nick);
-	my $request  = HTTP::Request->new( GET => $url );
-	my $ua       = LWP::UserAgent->new;
-	my $response = $ua->request($request);
-	if ($response->is_success) {
+    my ($msg, $nick);
+    my $request  = HTTP::Request->new( GET => $url );
+    my $ua       = LWP::UserAgent->new;
+    my $response = $ua->request($request);
+    if ($response->is_success) {
         if ($url =~ /mobile\./i) {
             ($msg) = $response->content =~ m{<span class="status">(.*)</span>}m;
             ($nick) = $url =~ m{(\w+)/status};
             $msg =~ s{<[^>]*>}{}g;
-		    $msg = $nick . ': ' . $msg;
         } else {
-		    ($nick) = $response->content =~ m{<title id="page_title">Twitter / ([^:]*)};
-		    ($msg) = $response->content =~ m{<meta content="([^"]*)" name="description" />}m;
-		    $msg = $nick . ': ' . $msg;
+            ($nick) = $response->content =~ m{<title id="page_title">Twitter / ([^:]*)};
+            ($msg) = $response->content =~ m{<meta content="([^"]*)" name="description" />}m;
         }
-	} else {
-		$msg = $response->status_line unless $response->is_success;
-	}
-	return $msg;
+
+        $msg =~ s/&amp;/&/g;
+        $msg =~ s/&lt;/</g;
+        $msg =~ s/&gt;/>/g;
+        $msg =~ s/&quot;/"/g;
+        $msg = $nick . ': ' . $msg;
+    } else {
+        $msg = $response->status_line unless $response->is_success;
+    }
+    return $msg;
 }
 
 __PACKAGE__->meta->make_immutable;
