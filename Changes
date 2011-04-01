@@ -1,5 +1,12 @@
 Revision history for Horris
 
+0.1.5_99    2011-04-01
+    - unescape at Twitter plugin
+        - &amp;
+        - &lt;
+        - &gt;
+        - &quot;
+
 0.1.5_99    2011-02-18
     - Added eng2kor feautre, but have to write test script
 
