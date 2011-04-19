@@ -3,15 +3,68 @@ package Horris::Connection::Plugin::LogWriter;
 
 =head1 SYNOPSIS
 
-Not yet Implemented.
+You can send message to Horris via JSON-RPC protocol.
+
+    use AnyEvent::JSONRPC;
+    use Encode qw(decode_utf8);
+    
+    my $client = jsonrpc_client '127.0.0.1', '8080';
+    
+    my $d = $client->call(
+        logwriter => {
+            id      => 'logwriter',
+            apikey  => '6d164e9d-27a1-49f2-9b1e-42a27378bef8',
+            channel => '#aanoaa',
+            nick    => 'keedi',
+            message => decode_utf8('Enjoy Perl! ;-)'),
+        },
+    );
+
+Configuration file:
+
+    <Config>
+        <Connection freenode>
+            Network freenode
+    
+            LoadModule Echo
+            ...
+            LoadModule LogWriter
+    
+            <Plugin Echo/>
+            ...
+            <Plugin LogWriter>
+                port 8080
+                <APIKeys>
+                    logwriter    6d164e9d-27a1-49f2-9b1e-42a27378bef4
+                    aanoaa-phone 98881796-cbf0-4aaf-b7cf-f780081f84e5
+                </APIKeys>
+            </Plugin>
+        </Connection>
+        ...
+    </Config>
 
 =head1 DESCRIPTION
 
-Not yet Implemented.
+LogWriter plugin accept external request
+which sends message to IRC channel via Horris.
+
+It uses two parameters from configuration file.
+
+=over
+
+=item * port
+
+Default port is 9090 and you can change port via configuration file.
+
+=item * APIKeys
+
+LogWriter uses apikey authorization.
+Only specified client id could send message to Horris.
+
+=back
 
 =cut
 
-use 5.010;
 use Moose;
 use AnyEvent::JSONRPC;
 extends 'Horris::Connection::Plugin';
