@@ -37,6 +37,7 @@ const my $JONGSUNG_BEGIN    => 0x11A8;
 const my $JONGSUNG_END      => 0x11FF;
 const my $JONGSUNG_DIGEUG   => 0x11AE; # ㄷ
 const my $JONGSUNG_BIEUP    => 0x11B8; # ㅂ
+const my $JONGSUNG_JIEUT    => 0x11BD; # ㅈ
 const my $SELLABLE_BEGIN    => 0x3131;
 const my $INTERVAL          => $SELLABLE_BEGIN - $JONGSUNG_BEGIN;
 
@@ -95,8 +96,10 @@ sub macboogi {
                 $code += $INTERVAL;
             } elsif ($code > $JONGSUNG_DIGEUG && $code <= $JONGSUNG_BIEUP) {
                 $code += $INTERVAL + 1;
-            } elsif ($code > $JONGSUNG_BIEUP && $code <= $JONGSUNG_END) {
+            } elsif ($code > $JONGSUNG_BIEUP && $code <= $JONGSUNG_JIEUT) {
                 $code += $INTERVAL + 2;
+            } elsif ($code > $JONGSUNG_JIEUT && $code <= $JONGSUNG_END) {
+                $code += $INTERVAL + 3;
             }
 
             $_ = pack 'U*', $code;
