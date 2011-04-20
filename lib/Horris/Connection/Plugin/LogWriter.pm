@@ -5,20 +5,30 @@ package Horris::Connection::Plugin::LogWriter;
 
 You can send message to Horris via JSON-RPC protocol.
 
+    use 5.010;
     use AnyEvent::JSONRPC;
     use Encode qw(decode_utf8);
     
     my $client = jsonrpc_client '127.0.0.1', '8080';
     
     my $d = $client->call(
-        logwriter => {
+            logwriter => {
             id      => 'logwriter',
-            apikey  => '6d164e9d-27a1-49f2-9b1e-42a27378bef8',
+            #apikey  => '6d164e9d-27a1-49f2-9b1e-42a27378bef8',
+            apikey  => '6d164e9d-27a1-49f2-9b1e-42a27378bef4',
             channel => '#aanoaa',
             nick    => 'keedi',
             message => decode_utf8('Enjoy Perl! ;-)'),
         },
     );
+    
+    my $result = $d->recv;
+    if (ref $result) {
+        say join ':', @$result;
+    }
+    else {
+        say $result;
+    }
 
 Configuration file:
 
