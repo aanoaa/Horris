@@ -27,7 +27,7 @@ has dbfile => (
 );
 
 has '+is_enable' => (
-	default => 0
+    default => 0
 );
 
 my $w;
@@ -105,20 +105,20 @@ sub on_disconnect {
 }
 
 sub irc_privmsg {
-	my ($self, $message) = @_;
-	my $msg = $message->message;
-	my $botname = $self->connection->nickname;
-	my ($cmd) = $msg =~ m/^$botname\S*\s+(\w+)/;
-	
-	if (defined $cmd and lc $cmd eq 'feed') {
-		$self->_switch;
-		$self->connection->irc_notice({
-			channel => $message->channel, 
-			message => $self->is_enable ? '[feed] on' : '[feed] off'
-		});
-	}
+    my ($self, $message) = @_;
+    my $msg = $message->message;
+    my $botname = $self->connection->nickname;
+    my ($cmd) = $msg =~ m/^$botname\S*\s+(\w+)/;
+    
+    if (defined $cmd and lc $cmd eq 'feed') {
+        $self->_switch;
+        $self->connection->irc_notice({
+            channel => $message->channel, 
+            message => $self->is_enable ? '[feed] on' : '[feed] off'
+        });
+    }
 
-	return $self->pass;
+    return $self->pass;
 }
 
 __PACKAGE__->meta->make_immutable;

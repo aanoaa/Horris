@@ -41,20 +41,20 @@ sub irc_privmsg {
         my $do_peek = defined($2) ? 0 : 1;
         next unless $do_peek;
 
-		my $shorten_url;
+        my $shorten_url;
         my $uri = URI->new($1);
         next unless $uri->scheme && $uri->scheme =~ /^http/i;
         next unless $uri->authority;
 
         if (length "$uri" > 50 && $uri->authority !~ /tinyurl|bit\.ly/) {
-			$shorten_url = makeashorterlink($uri);
+            $shorten_url = makeashorterlink($uri);
             $uri = URI->new($shorten_url);
 #            $self->connection->irc_notice({
 #                channel => $msg->channel,
 #                message => "short url: $uri"
 #            });
         }
-		$shorten_url = $shorten_url ? " - $shorten_url" : '';
+        $shorten_url = $shorten_url ? " - $shorten_url" : '';
 
         my @ct;
         my $ct = 0; # 0 - text, 1 - image, 2, other
@@ -151,21 +151,21 @@ sub irc_privmsg {
                                     $p->parse_content(decode($try_charset, $data, FB_CROAK ) );
                                 };
                     
-								$charset = $try_charset unless $@;
+                                $charset = $try_charset unless $@;
                                 last unless $@;
                             }
                         }
         
                         my ($title) = $p->look_down(_tag => qr/^title$/i);
-						$title ||= $self->_get_dirty_title($data, $charset);
+                        $title ||= $self->_get_dirty_title($data, $charset);
 
-						my $title_text;
-						if(ref(\$title) eq 'SCALAR') {
-							$title_text = $title;
-						}
-						else {
-							$title_text = $title ? $title->as_trimmed_text(skip_dels => 1) || '' : 'No title';
-						}
+                        my $title_text;
+                        if(ref(\$title) eq 'SCALAR') {
+                            $title_text = $title;
+                        }
+                        else {
+                            $title_text = $title ? $title->as_trimmed_text(skip_dels => 1) || '' : 'No title';
+                        }
 
                         $self->connection->irc_notice({
                             channel => $msg->channel,
@@ -173,7 +173,7 @@ sub irc_privmsg {
                                 sprintf('%s [%s]%s', 
                                     $title_text,
                                     $ct[0] || '?',
-									$shorten_url
+                                    $shorten_url
                                 )
                             )
                         });
@@ -195,14 +195,14 @@ sub irc_privmsg {
         ;
     }
 
-	$self->pass;
+    $self->pass;
 }
 
 sub _get_dirty_title {
-	my ($self, $data, $charset) = @_;
-	my $html = decode($charset, $data);
-	$html =~ m{<title>(.+)</title>};
-	return $1;
+    my ($self, $data, $charset) = @_;
+    my $html = decode($charset, $data);
+    $html =~ m{<title>(.+)</title>};
+    return $1;
 }
 
 __PACKAGE__->meta->make_immutable;

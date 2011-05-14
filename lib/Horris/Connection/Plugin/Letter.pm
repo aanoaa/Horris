@@ -3,8 +3,8 @@ package Horris::Connection::Plugin::Letter;
 
 =head1 SYNOPSIS
 
-	# assume here at a irc channel
-	HH:MM:SS    NICK | letter PDF
+    # assume here at a irc channel
+    HH:MM:SS    NICK | letter PDF
     HH:MM:SS BOTNAME |  ____  _____  _____  
                        |  _ \|  _  \|  ___| 
                        | |_) | | \  | |_    
@@ -31,22 +31,22 @@ has 'letter' => (
 sub _build_letter { Acme::Letter->new };
 
 sub irc_privmsg {
-	my ($self, $message) = @_;
+    my ($self, $message) = @_;
     for my $msg ($self->_letter($message)) {
-	    $self->connection->irc_privmsg({
-		    channel => $message->channel, 
-		    message => $msg
-	    });
+        $self->connection->irc_privmsg({
+            channel => $message->channel, 
+            message => $msg
+        });
     }
 
     return $self->pass;
 }
 
 sub _letter {
-	my ($self, $message) = @_;
-	my $msg = $message->message;
+    my ($self, $message) = @_;
+    my $msg = $message->message;
 
-	unless ($msg =~ m/^letter/i) {
+    unless ($msg =~ m/^letter/i) {
         return ();
     }
 

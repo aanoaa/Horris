@@ -20,33 +20,33 @@ extends 'MooseX::App::Cmd::Command';
 with qw/MooseX::SimpleConfig/;
 
 has '+configfile' => (
-	default => '/etc/horris.conf'
+    default => '/etc/horris.conf'
 );
 
 has config => (
-	traits => ['NoGetopt'], 
-	is => 'ro', 
-	isa => 'HashRef', 
+    traits => ['NoGetopt'], 
+    is => 'ro', 
+    isa => 'HashRef', 
 );
 
 around _usage_format => sub {
-	return "usage: %c %o (run 'perldoc " . __PACKAGE__ . "' for more info)";
+    return "usage: %c %o (run 'perldoc " . __PACKAGE__ . "' for more info)";
 };
 
 sub config_any_args {
-	return {
-		driver_args => {
-			General => {
-				-LowerCaseNames => 1, 
-			}
-		}
-	};
+    return {
+        driver_args => {
+            General => {
+                -LowerCaseNames => 1, 
+            }
+        }
+    };
 }
 
 sub execute {
     my ( $self, $opt, $args ) = @_;
-	my $horris = Horris->new(config => $self->config);
-	$horris->run;
+    my $horris = Horris->new(config => $self->config);
+    $horris->run;
 }
 
 1;

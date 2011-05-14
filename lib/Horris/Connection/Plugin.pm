@@ -9,7 +9,7 @@ package Horris::Connection::Plugin;
 
     # override member variables if you want.
     has '+is_enable' => (
-        default => 0	# $self->is_enable is false
+        default => 0    # $self->is_enable is false
     );
 
     sub init {
@@ -26,9 +26,9 @@ package Horris::Connection::Plugin;
 
     sub irc_privmsg {
         my ($self, $message) = @_;
-        #	this hook method will called by Horris::Connection
-        #	when 'irc_privmsg' event occur in joinning irc channels
-        #	see the AnyEvent::IRC::Client for 'irc_privmsg' more detail
+        #    this hook method will called by Horris::Connection
+        #    when 'irc_privmsg' event occur in joinning irc channels
+        #    see the AnyEvent::IRC::Client for 'irc_privmsg' more detail
         #
         # implement irc_privmsg stuff here
     }
@@ -55,53 +55,53 @@ use Moose;
 use namespace::clean -except => qw/meta/;
 
 has connection => (
-	is => 'ro', 
-	isa => 'Horris::Connection', 
-	writer => '_connection'
+    is => 'ro', 
+    isa => 'Horris::Connection', 
+    writer => '_connection'
 );
 
 has is_enable => (
-	traits => ['Bool'], 
-	is => 'rw', 
-	isa => 'Bool', 
-	default => 1, 
-	handles => {
-		enable => 'set', 
-		disable => 'unset', 
-		_switch => 'toggle', 
-		is_disable => 'not'
-	}
+    traits => ['Bool'], 
+    is => 'rw', 
+    isa => 'Bool', 
+    default => 1, 
+    handles => {
+        enable => 'set', 
+        disable => 'unset', 
+        _switch => 'toggle', 
+        is_disable => 'not'
+    }
 );
 
 has pass => (
-	is => 'ro',
-	isa => 'Int',
-	default => 0,
+    is => 'ro',
+    isa => 'Int',
+    default => 0,
 );
 
 has done => (
-	is => 'ro',
-	isa => 'Int',
-	default => 1,
+    is => 'ro',
+    isa => 'Int',
+    default => 1,
 );
 
 sub init {
-	my ($self, $conn) = @_;
-	my $pname = ref $self;
-	print $pname, " on - ", $self->is_enable ? 'enable' : 'disable', "\n" if $Horris::DEBUG;
-	$self->_connection($conn);
+    my ($self, $conn) = @_;
+    my $pname = ref $self;
+    print $pname, " on - ", $self->is_enable ? 'enable' : 'disable', "\n" if $Horris::DEBUG;
+    $self->_connection($conn);
 }
 
 around BUILDARGS => sub {
-	my ($orig, $class, @args) = @_;
-	my $self = $class->$orig(@args);
-	my @reserve_keys = qw/parent name/;
-	while (my ($key, $value) = each %{ $self->{parent}{plugin}{$self->{name}} }) {
-		confess 'keys [' . join(', ', @reserve_keys) . "] are reserved\n" if grep { $key eq $_ } @reserve_keys;
-		$self->{$key} = $value;
-	}
+    my ($orig, $class, @args) = @_;
+    my $self = $class->$orig(@args);
+    my @reserve_keys = qw/parent name/;
+    while (my ($key, $value) = each %{ $self->{parent}{plugin}{$self->{name}} }) {
+        confess 'keys [' . join(', ', @reserve_keys) . "] are reserved\n" if grep { $key eq $_ } @reserve_keys;
+        $self->{$key} = $value;
+    }
 
-	return $self;
+    return $self;
 };
 
 __PACKAGE__->meta->make_immutable;

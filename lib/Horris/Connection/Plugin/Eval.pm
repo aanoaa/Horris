@@ -3,11 +3,11 @@ package Horris::Connection::Plugin::Eval;
 
 =head1 SYNOPSIS
 
-	# assume here at a irc channel
-	HH:MM:SS    NICK | eval print 'hello world'
-	HH:MM:SS BOTNAME | hello world
-	HH:MM:SS    NICK | eval use 5.0.10; say $^V
-	HH:MM:SS BOTNAME | v5.10.1
+    # assume here at a irc channel
+    HH:MM:SS    NICK | eval print 'hello world'
+    HH:MM:SS BOTNAME | hello world
+    HH:MM:SS    NICK | eval use 5.0.10; say $^V
+    HH:MM:SS BOTNAME | v5.10.1
 
 =head1 DESCRIPTION
 
@@ -28,26 +28,26 @@ extends 'Horris::Connection::Plugin';
 with 'MooseX::Role::Pluggable::Plugin';
 
 sub irc_privmsg {
-	my ($self, $message) = @_;
-	my $msg = $self->_eval($message);
+    my ($self, $message) = @_;
+    my $msg = $self->_eval($message);
 
-	return unless defined $msg;
+    return unless defined $msg;
 
     for (split /\n/, $msg) {
-	    $self->connection->irc_privmsg({
-		    channel => $message->channel, 
-		    message => $_
-	    });
+        $self->connection->irc_privmsg({
+            channel => $message->channel, 
+            message => $_
+        });
     }
 
-	return $self->pass;
+    return $self->pass;
 }
 
 sub _eval {
-	my ($self, $message) = @_;
-	my $raw = $message->message;
+    my ($self, $message) = @_;
+    my $raw = $message->message;
 
-	unless ($raw =~ m/^eval/i) {
+    unless ($raw =~ m/^eval/i) {
         return undef;
     }
 

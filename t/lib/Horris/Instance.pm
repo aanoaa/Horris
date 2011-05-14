@@ -21,7 +21,7 @@ sub new {
         password => '', 
         server   => '', 
         username => '', 
-        plugins	 => $plugins
+        plugins     => $plugins
     );
 
     bless $self, $class;

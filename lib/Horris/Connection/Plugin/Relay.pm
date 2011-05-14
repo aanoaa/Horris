@@ -66,9 +66,9 @@ around BUILDARGS => sub {
 };
 
 sub on_connect {
-	my ($self) = @_;
+    my ($self) = @_;
 
-	my $conn = $self->connection;
+    my $conn = $self->connection;
     my $server = port;
     rcv $server, notice => sub {
         my ($channel, $message) = @_;
@@ -84,10 +84,10 @@ sub on_connect {
             message => $message
         });
     };
-	warn "MP Server - $server\n";
+    warn "MP Server - $server\n";
     $self->__guard( grp_reg $self->group, $server );
 
-	return $self->pass;
+    return $self->pass;
 }
 
 sub irc_privmsg {
@@ -102,18 +102,18 @@ sub irc_privmsg {
 
     my $config = $self->from->{'\\'.$channel};
 
-	return unless $config;
+    return unless $config;
 
-	my $ports = grp_get $config->{target};
-	if($ports) {
-		my $server = $ports->[0];
-		my $msg = sprintf('<%s> %s', $nickname, $message);
-		if ($config->{encode} && $config->{decode}) {
-		$msg = Encode::encode($config->{encode}, Encode::decode($config->{decode}, $msg));
-		}
+    my $ports = grp_get $config->{target};
+    if($ports) {
+        my $server = $ports->[0];
+        my $msg = sprintf('<%s> %s', $nickname, $message);
+        if ($config->{encode} && $config->{decode}) {
+        $msg = Encode::encode($config->{encode}, Encode::decode($config->{decode}, $msg));
+        }
 
-		snd $server, $config->{type} => $_, $msg for @{ $config->{to} };
-	}
+        snd $server, $config->{type} => $_, $msg for @{ $config->{to} };
+    }
 }
  
 __PACKAGE__->meta->make_immutable();
