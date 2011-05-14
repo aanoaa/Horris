@@ -2,7 +2,7 @@ package Horris::Connection::Plugin::Hit;
 # ABSTRACT: Dis(디스) Plugin on Horris
 
 =head1 SYNOPSIS
- 
+
     I don't know about origin of a word 'dis'
     some day a3r0 said, hongbot: hit jeen
     so i made this.
@@ -40,8 +40,8 @@ extends 'Horris::Connection::Plugin';
 with 'MooseX::Role::Pluggable::Plugin';
 
 has texts => (
-    is => 'ro', 
-    isa => 'ArrayRef', 
+    is => 'ro',
+    isa => 'ArrayRef',
 );
 
 sub irc_privmsg {
@@ -64,7 +64,7 @@ sub irc_privmsg {
     }
 
     $self->connection->irc_privmsg({
-        channel => $message->channel, 
+        channel => $message->channel,
         message => $output
     });
 
@@ -81,7 +81,7 @@ sub on_privatemsg {
         for my $channel (keys %channel_list) {
             if (grep { m/$nick/ } keys %{ $channel_list{$channel} }) {
                 $self->connection->irc_privmsg({
-                    channel => $channel, 
+                    channel => $channel,
                     message => $output
                 });
             }

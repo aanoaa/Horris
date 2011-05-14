@@ -36,7 +36,7 @@ package Horris::Connection::Plugin;
     sub on_privatemsg {
         my ($self, $nick, $message) = @_;
         # this hook method will called when who send a private message to
-        # your bot. 
+        # your bot.
     }
 
     __PACKAGE__->meta->make_immutable;
@@ -55,20 +55,20 @@ use Moose;
 use namespace::clean -except => qw/meta/;
 
 has connection => (
-    is => 'ro', 
-    isa => 'Horris::Connection', 
+    is => 'ro',
+    isa => 'Horris::Connection',
     writer => '_connection'
 );
 
 has is_enable => (
-    traits => ['Bool'], 
-    is => 'rw', 
-    isa => 'Bool', 
-    default => 1, 
+    traits => ['Bool'],
+    is => 'rw',
+    isa => 'Bool',
+    default => 1,
     handles => {
-        enable => 'set', 
-        disable => 'unset', 
-        _switch => 'toggle', 
+        enable => 'set',
+        disable => 'unset',
+        _switch => 'toggle',
         is_disable => 'not'
     }
 );

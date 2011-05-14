@@ -32,7 +32,7 @@ sub irc_privmsg {
 
     for (@msg) {
         $self->connection->irc_privmsg({
-            channel => $message->channel, 
+            channel => $message->channel,
             message => $_
         });
     }

@@ -109,11 +109,11 @@ sub irc_privmsg {
     my $msg = $message->message;
     my $botname = $self->connection->nickname;
     my ($cmd) = $msg =~ m/^$botname\S*\s+(\w+)/;
-    
+
     if (defined $cmd and lc $cmd eq 'feed') {
         $self->_switch;
         $self->connection->irc_notice({
-            channel => $message->channel, 
+            channel => $message->channel,
             message => $self->is_enable ? '[feed] on' : '[feed] off'
         });
     }

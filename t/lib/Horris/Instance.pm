@@ -16,11 +16,11 @@ make a new instance for plugin test
 sub new {
     my ($class, $plugins) = @_;
     my $self->{conn} = Horris::Connection->new(
-        nickname => '', 
-        port     => '', 
-        password => '', 
-        server   => '', 
-        username => '', 
+        nickname => '',
+        port     => '',
+        password => '',
+        server   => '',
+        username => '',
         plugins     => $plugins
     );
 

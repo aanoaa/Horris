@@ -8,9 +8,9 @@ You can send message to Horris via JSON-RPC protocol.
     use 5.010;
     use AnyEvent::JSONRPC;
     use Encode qw(decode_utf8);
-    
+
     my $client = jsonrpc_client '127.0.0.1', '8080';
-    
+
     my $d = $client->call(
             logwriter => {
             id      => 'logwriter',
@@ -21,7 +21,7 @@ You can send message to Horris via JSON-RPC protocol.
             message => decode_utf8('Enjoy Perl! ;-)'),
         },
     );
-    
+
     my $result = $d->recv;
     if (ref $result) {
         say join ':', @$result;
@@ -35,11 +35,11 @@ Configuration file:
     <Config>
         <Connection freenode>
             Network freenode
-    
+
             LoadModule Echo
             ...
             LoadModule LogWriter
-    
+
             <Plugin Echo/>
             ...
             <Plugin LogWriter>

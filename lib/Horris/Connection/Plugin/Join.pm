@@ -23,8 +23,8 @@ extends 'Horris::Connection::Plugin';
 with 'MooseX::Role::Pluggable::Plugin';
 
 has channels => (
-    is => 'ro', 
-    isa => 'ArrayRef', 
+    is => 'ro',
+    isa => 'ArrayRef',
 );
 
 sub on_connect {

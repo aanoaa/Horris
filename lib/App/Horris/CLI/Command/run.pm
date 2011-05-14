@@ -24,9 +24,9 @@ has '+configfile' => (
 );
 
 has config => (
-    traits => ['NoGetopt'], 
-    is => 'ro', 
-    isa => 'HashRef', 
+    traits => ['NoGetopt'],
+    is => 'ro',
+    isa => 'HashRef',
 );
 
 around _usage_format => sub {
@@ -37,7 +37,7 @@ sub config_any_args {
     return {
         driver_args => {
             General => {
-                -LowerCaseNames => 1, 
+                -LowerCaseNames => 1,
             }
         }
     };

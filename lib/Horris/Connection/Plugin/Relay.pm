@@ -26,7 +26,7 @@ use AnyEvent::MP qw(configure port rcv snd);
 use AnyEvent::MP::Global qw(grp_reg grp_mon grp_get);
 use namespace::clean -except => qw(meta);
 use Encode ();
- 
+
 extends 'Horris::Connection::Plugin';
 with 'MooseX::Role::Pluggable::Plugin';
 
@@ -43,7 +43,7 @@ has profile => (
     default => 'morris',
     required => 1,
 );
- 
+
 has from => (
     traits => [ 'Hash' ],
     is => 'ro',
@@ -53,12 +53,12 @@ has from => (
       get_instance => 'get',
     }
 );
- 
+
 has __guard => (
     is => 'rw',
     clearer => 'clear_guard',
 );
- 
+
 around BUILDARGS => sub {
     my ($next, $class, @args) = @_;
     my $args = $next->($class, @args);
@@ -92,7 +92,7 @@ sub on_connect {
 
 sub irc_privmsg {
     my ($self, $msg) = @_;
- 
+
     my $channel = $msg->channel;
     my $message = $msg->message;
     my $nickname = $msg->nickname;
@@ -115,15 +115,15 @@ sub irc_privmsg {
         snd $server, $config->{type} => $_, $msg for @{ $config->{to} };
     }
 }
- 
+
 __PACKAGE__->meta->make_immutable();
- 
+
 1;
- 
+
 __END__
- 
+
 config
- 
+
 ...
 <Plugin MP::Relay>
 <From \#perl-kr>

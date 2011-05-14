@@ -12,11 +12,11 @@ package Horris::Connection::Plugin::Macboogi;
     # 종성 'ㄷ': 11AE
     # 음절 'ㄷ': 3137
     # 음절 'ㄸ' 이 종성엔 없다.
-    
+
     # 종성 'ㅂ': 11B8
     # 음절 'ㅂ': 3143
     # 음절 'ㅃ' 이 종성엔 없다.
-    
+
     # 나머진 무시하자
 
 =head1 DESCRIPTION
@@ -50,7 +50,7 @@ sub irc_privmsg {
 
     for (split /\n/, $msg) {
         $self->connection->irc_privmsg({
-            channel => $message->channel, 
+            channel => $message->channel,
             message => $_
         });
     }

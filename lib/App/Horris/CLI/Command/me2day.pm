@@ -37,7 +37,7 @@ has tracing => (
     is            => 'ro',
     isa           => "ArrayRef[Str]",
     traits        => ['Getopt'],
-    default       => sub { [ 'i_u0516', 'aanoaa' ] }, 
+    default       => sub { [ 'i_u0516', 'aanoaa' ] },
     cmd_aliases   => 't',
     documentation => "me2day id. 'i_u0516' and 'aanoaa' is default to use",
 );

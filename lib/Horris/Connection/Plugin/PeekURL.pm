@@ -60,7 +60,7 @@ sub irc_privmsg {
         my $ct = 0; # 0 - text, 1 - image, 2, other
         my $file;
 
-        my $guard; $guard = http_get $uri, 
+        my $guard; $guard = http_get $uri,
             timeout   => 30,
             recurse   => 10,
             on_header => sub {
@@ -83,7 +83,7 @@ sub irc_privmsg {
                     undef $guard;
                     $ct = 2;
                     $self->connection->irc_notice({
-                        channel => $msg->channel, 
+                        channel => $msg->channel,
                         message => sprintf( "%s [%s]%s", $uri, $ct[0], $shorten_url)
                     });
                     return;
@@ -104,22 +104,22 @@ sub irc_privmsg {
                 if ($ct == 1) {
                     my($width, $height) = Image::Size::imgsize($file);
                     $self->connection->irc_notice({
-                        channel => $msg->channel, 
+                        channel => $msg->channel,
                         message => sprintf( "%s [%s, w=%d, h=%d]%s", $uri, $ct[0], $width, $height, $shorten_url )
                     });
                 } else {
                     my $p;
                     my $data = do { local $/; <$file> };
-                    eval { 
+                    eval {
                         $p = HTML::TreeBuilder->new(
                             implicit_tags => 1,
                             ignore_unknoown => 1,
                             ignore_text => 0
                         );
                         $p->strict_comment(1);
-        
+
                         my $charset;
-        
+
                         if ($data =~ /charset=(?:'([^']+?)'|"([^"]+?)"|([a-zA-Z0-9_-]+)\b)/) {
                             my $cs = lc($1 || $2 || $3);
                             if ($cs =~ /^Shift[-_]?JIS$/i) {
@@ -139,7 +139,7 @@ sub irc_privmsg {
                             }
                         }
                         $charset ||= 'utf-8';
-        
+
                         eval {
                             $p->parse_content(
                                 decode( $charset, $data, FB_CROAK ) );
@@ -150,12 +150,12 @@ sub irc_privmsg {
                                 eval {
                                     $p->parse_content(decode($try_charset, $data, FB_CROAK ) );
                                 };
-                    
+
                                 $charset = $try_charset unless $@;
                                 last unless $@;
                             }
                         }
-        
+
                         my ($title) = $p->look_down(_tag => qr/^title$/i);
                         $title ||= $self->_get_dirty_title($data, $charset);
 
@@ -170,7 +170,7 @@ sub irc_privmsg {
                         $self->connection->irc_notice({
                             channel => $msg->channel,
                             message => encode_utf8(
-                                sprintf('%s [%s]%s', 
+                                sprintf('%s [%s]%s',
                                     $title_text,
                                     $ct[0] || '?',
                                     $shorten_url
@@ -188,7 +188,7 @@ sub irc_privmsg {
                         });
                     }
                     if ($p) {
-                        eval { $p->delete }; 
+                        eval { $p->delete };
                     }
                 }
             }

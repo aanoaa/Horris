@@ -5,11 +5,11 @@ package Horris::Connection::Plugin::Letter;
 
     # assume here at a irc channel
     HH:MM:SS    NICK | letter PDF
-    HH:MM:SS BOTNAME |  ____  _____  _____  
-                       |  _ \|  _  \|  ___| 
-                       | |_) | | \  | |_    
-                       |  __/| |_/  |  _|   
-                       |_|   |_____/|_|    
+    HH:MM:SS BOTNAME |  ____  _____  _____
+                       |  _ \|  _  \|  ___|
+                       | |_) | | \  | |_
+                       |  __/| |_/  |  _|
+                       |_|   |_____/|_|
 
 =head1 SEE ALSO
 
@@ -23,8 +23,8 @@ extends 'Horris::Connection::Plugin';
 with 'MooseX::Role::Pluggable::Plugin';
 
 has 'letter' => (
-    is => 'rw', 
-    isa => 'Acme::Letter', 
+    is => 'rw',
+    isa => 'Acme::Letter',
     lazy_build => 1
 );
 
@@ -34,7 +34,7 @@ sub irc_privmsg {
     my ($self, $message) = @_;
     for my $msg ($self->_letter($message)) {
         $self->connection->irc_privmsg({
-            channel => $message->channel, 
+            channel => $message->channel,
             message => $msg
         });
     }
@@ -54,13 +54,13 @@ sub _letter {
     $self->letter->_createString($msg);
     my $lines_ref = $self->letter->{"lines"};
     my @letters;
-    for(my $i = 0; $i <= 4; $i++) {   
+    for(my $i = 0; $i <= 4; $i++) {
         my $line = '';
         my $temps=$$lines_ref[$i];
-        foreach my $temp (@$temps) {   
+        foreach my $temp (@$temps) {
             if(not defined $temp) {
                 $line .= " ";
-            } elsif($temp eq "*") {   
+            } elsif($temp eq "*") {
                 $line .= " ";
             } else {
                 $line .= $temp;

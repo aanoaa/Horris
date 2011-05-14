@@ -11,7 +11,7 @@ package Horris::Connection;
         password => $optional_password,
         server   => $server_name,
         username => $username,
-        plugins     => [qw/Foo Bar Baz/], 
+        plugins     => [qw/Foo Bar Baz/],
     );
 
 =head1 HOW TO IMPLEMENTS YOUR OWN HOOK METHODS?
@@ -56,56 +56,56 @@ with 'MooseX::Role::Pluggable';
 const my $IRC_DEFAULT_PORT => 6667;
 
 has irc => (
-    is => 'rw', 
-    isa => 'AnyEvent::IRC::Client', 
+    is => 'rw',
+    isa => 'AnyEvent::IRC::Client',
     handles => {
-        send_srv => 'send_srv', 
+        send_srv => 'send_srv',
     }
 );
 
 has nickname => (
-    is => 'ro', 
-    isa => 'Str', 
+    is => 'ro',
+    isa => 'Str',
     required => 1
 );
 
 has password => (
-    is => 'ro', 
-    isa => 'Str', 
+    is => 'ro',
+    isa => 'Str',
 );
 
 has port => (
-    is => 'ro', 
-    isa => 'Str', 
-    default => $IRC_DEFAULT_PORT, 
+    is => 'ro',
+    isa => 'Str',
+    default => $IRC_DEFAULT_PORT,
 );
 
 has server => (
-    is => 'ro', 
-    isa => 'Str', 
+    is => 'ro',
+    isa => 'Str',
     required => 1
 );
 
 has username => (
-    is => 'ro', 
-    isa => 'Str', 
+    is => 'ro',
+    isa => 'Str',
     lazy_build => 1
 );
 
 has channels => (
-    is => 'ro', 
-    isa => 'ArrayRef[Str]', 
+    is => 'ro',
+    isa => 'ArrayRef[Str]',
 );
 
 # plugin's preference from configfle,
 # Horris::Connection::Plugin using it when all the plugins are initialize.
 has 'plugin' => (
-    traits => ['Hash'], 
-    is => 'ro', 
-    isa => 'HashRef', 
+    traits => ['Hash'],
+    is => 'ro',
+    isa => 'HashRef',
     handles => {
         get_args => 'get',
-    }, 
+    },
 );
 
 sub _build_username { $_[0]->nickname }
@@ -134,8 +134,8 @@ sub run {
     $irc->reg_cb(irc_privmsg => sub {
         my ($con, $raw) = @_;
         my $message = Horris::Message->new(
-            channel => $raw->{params}->[0], 
-            message => $raw->{params}->[1], 
+            channel => $raw->{params}->[0],
+            message => $raw->{params}->[1],
             from    => $raw->{prefix}
         );
 
@@ -145,9 +145,9 @@ sub run {
     $irc->reg_cb(privatemsg => sub {
         my ($con, $nick, $raw) = @_;
         my $message = Horris::Message->new(
-            channel => '', 
-            message => $raw->{params}->[1], 
-            from    => defined $raw->{prefix} ? $raw->{prefix} : '', 
+            channel => '',
+            message => $raw->{params}->[1],
+            from    => defined $raw->{prefix} ? $raw->{prefix} : '',
         );
         $self->occur_event('on_privatemsg', $nick, $message);
     });
@@ -182,7 +182,7 @@ sub occur_event {
         my $plugin = $plugins->{$plugin_name};
         my $rev = $plugin->$event(@args) if $plugin->can($event);
 
-        # Don't try next plugin for $event if current plugin returns true 
+        # Don't try next plugin for $event if current plugin returns true
         last if defined $rev and $rev;
     }
 }
