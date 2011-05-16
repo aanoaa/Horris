@@ -116,12 +116,13 @@ sub irc_privmsg {
             my ( $y, $m, $d, $h, $mm, $s )
                 = $bug->last_change_time =~ m/(....)(..)(..)T(..):(..):(..)/g;
             my $last_dt = DateTime->new(
-                year   => $y,
-                month  => $m,
-                day    => $d,
-                hour   => $h,
-                minute => $mm,
-                second => $s,
+                time_zone => 'UTC',
+                year      => $y,
+                month     => $m,
+                day       => $d,
+                hour      => $h,
+                minute    => $mm,
+                second    => $s,
             );
             $last_dt->set_time_zone( $bot->{timezone} ) if $bot->{timezone};
 
