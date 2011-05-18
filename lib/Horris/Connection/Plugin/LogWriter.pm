@@ -58,9 +58,13 @@ Configuration file:
 LogWriter plugin accept external request
 which sends message to IRC channel via Horris.
 
-It uses two parameters from configuration file.
+It uses three parameters from configuration file.
 
 =over
+
+=item * host
+
+Default host is localhost and you can change host via configuration file.
 
 =item * port
 
@@ -85,6 +89,12 @@ has apikeys => (
     isa => 'HashRef',
 );
 
+has host => (
+    is      => 'ro',
+    isa     => 'Str',
+    default => 'localhost',
+);
+
 has port => (
     is      => 'ro',
     isa     => 'Int',
@@ -95,7 +105,7 @@ my $server;
 after init => sub {
     my $self = shift;
 
-    $server = jsonrpc_server '127.0.0.1', $self->port;
+    $server = jsonrpc_server $self->host, $self->port;
     $server->reg_cb(
         logwriter => sub {
             my ($cb, %params) = @_;
