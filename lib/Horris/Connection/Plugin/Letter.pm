@@ -18,6 +18,7 @@ L<Acme::Letter>
 =cut
 
 use Moose;
+use Time::HiRes;
 use Acme::Letter;
 extends 'Horris::Connection::Plugin';
 with 'MooseX::Role::Pluggable::Plugin';
@@ -32,11 +33,15 @@ sub _build_letter { Acme::Letter->new };
 
 sub irc_privmsg {
     my ($self, $message) = @_;
+    my $cnt = 0;
     for my $msg ($self->_letter($message)) {
+        Time::HiRes::sleep(0.1) if $cnt == 3;
         $self->connection->irc_privmsg({
             channel => $message->channel,
             message => $msg
         });
+
+        $cnt++;
     }
 
     return $self->pass;
