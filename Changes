@@ -1,6 +1,115 @@
 Revision history for Horris
 
-0.1.5_99    2011-04-01
+0.1.7_99    2011-06-03
+
+    2011-06-03
+
+        Hyungsuk Hong <aanoaa@gmail.com>
+
+            * lib/Horris/Connection/Plugin/Letter.pm: Gave a sleep for Letter String
+
+    2011-05-17
+
+        Keedi Kim <keedi.k@gmail.com>
+
+            * lib/Horris/Connection/Plugin/Lotto.pm: Add lotto plugin
+
+    2011-05-16
+
+        Hyungsuk Hong <aanoaa@gmail.com>
+
+            * Impl logging plugin
+
+                - lib/App/Horris/CLI/Command/log.pm
+                - lib/Horris/Connection/Plugin/Log.pm
+
+        Keedi Kim <keedi.k@gmail.com>
+
+            * lib/Horris/Connection/Plugin/Bugzilla.pm: Show locale time rather than UTC time
+
+            * Implement bugzilla plugin
+
+                - lib/Horris/Connection/Plugin/Bugzilla.pm
+                - misc/sample.conf
+
+    2011-05-14
+
+        Hyungsuk Hong <aanoaa@gmail.com>
+
+            * Removed trailing space
+
+                - lib/App/Horris/CLI/Command/feed.pm
+                - lib/App/Horris/CLI/Command/me2day.pm
+                - lib/App/Horris/CLI/Command/run.pm
+                - lib/App/Horris/CLI/Command/twitter_stream.pm
+                - lib/Horris.pm
+                - lib/Horris/Connection.pm
+                - lib/Horris/Connection/Plugin.pm
+                - lib/Horris/Connection/Plugin/Echo.pm
+                - lib/Horris/Connection/Plugin/Eng2kor.pm
+                - lib/Horris/Connection/Plugin/Eval.pm
+                - lib/Horris/Connection/Plugin/Hit.pm
+                - lib/Horris/Connection/Plugin/Join.pm
+                - lib/Horris/Connection/Plugin/Kspell.pm
+                - lib/Horris/Connection/Plugin/Letter.pm
+                - lib/Horris/Connection/Plugin/LogWriter.pm
+                - lib/Horris/Connection/Plugin/Macboogi.pm
+                - lib/Horris/Connection/Plugin/PeekURL.pm
+                - lib/Horris/Connection/Plugin/Poller.pm
+                - lib/Horris/Connection/Plugin/Relay.pm
+                - t/lib/Horris/Instance.pm
+
+            * s/\t/    /g
+
+                - lib/App/Horris/CLI/Command/run.pm
+                - lib/Horris/Connection.pm
+                - lib/Horris/Connection/Plugin.pm
+                - lib/Horris/Connection/Plugin/Echo.pm
+                - lib/Horris/Connection/Plugin/Eng2kor.pm
+                - lib/Horris/Connection/Plugin/Eval.pm
+                - lib/Horris/Connection/Plugin/Hit.pm
+                - lib/Horris/Connection/Plugin/Join.pm
+                - lib/Horris/Connection/Plugin/Kspell.pm
+                - lib/Horris/Connection/Plugin/Letter.pm
+                - lib/Horris/Connection/Plugin/PeekURL.pm
+                - lib/Horris/Connection/Plugin/Poller.pm
+                - lib/Horris/Connection/Plugin/PowerManager.pm
+                - lib/Horris/Connection/Plugin/RPC.pm
+                - lib/Horris/Connection/Plugin/Relay.pm
+                - lib/Horris/Message.pm
+                - t/lib/Horris/Instance.pm
+
+            * dist.ini: Better dist.ini
+
+    2011-04-20
+
+        Hyungsuk Hong <aanoaa@gmail.com>
+
+            * lib/Horris/Connection/Plugin/Macboogi.pm: Consider 'ㅉ'
+
+            * Impl macboogi yuni++
+
+                - lib/Horris/Connection/Plugin/Macboogi.pm
+                - misc/sample.conf
+
+            * lib/Horris/Connection/Plugin/Macboogi.pm: Added Macboogi test code
+
+            * lib/Horris/Connection/Plugin/LogWriter.pm: Update document: how to send message via LogWriter
+
+            * lib/Horris/Connection/Plugin/Macboogi.pm: Added skeleton
+
+    2011-04-19
+
+        Keedi Kim <keedi.k@gmail.com>
+
+            * lib/Horris/Connection/Plugin/LogWriter.pm: Add documentation
+
+            * Implement Logwriter plugin using jsonrpc server
+
+                - lib/Horris/Connection/Plugin/LogWriter.pm
+                - misc/sample.conf
+
+0.1.6_99    2011-04-01
     - unescape at Twitter plugin
         - &amp;
         - &lt;
