@@ -33,15 +33,12 @@ sub _build_letter { Acme::Letter->new };
 
 sub irc_privmsg {
     my ($self, $message) = @_;
-    my $cnt = 0;
     for my $msg ($self->_letter($message)) {
-        Time::HiRes::sleep(0.1) if $cnt == 3;
+        Time::HiRes::sleep(0.1);
         $self->connection->irc_privmsg({
             channel => $message->channel,
             message => $msg
         });
-
-        $cnt++;
     }
 
     return $self->pass;
