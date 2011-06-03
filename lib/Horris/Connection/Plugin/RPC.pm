@@ -19,21 +19,21 @@ extends 'Horris::Connection::Plugin';
 with 'MooseX::Role::Pluggable::Plugin';
 
 has '+is_enable' => (
-	default => 0
+    default => 0
 );
 
 after init => sub {
-	my $self = shift;
-	configure nodeid => "eg_receiver", binds => ["*:4040"];
-	my $port = port;
-	grp_reg eg_receivers => $port;
-	rcv $port, test => sub {
-		my ($data) = @_;
-		$self->connection->irc_privmsg({
-			channel => '#aanoaa', # for test
-			message => $data
-		});
-	}
+    my $self = shift;
+    configure nodeid => "eg_receiver", binds => ["*:4040"];
+    my $port = port;
+    grp_reg eg_receivers => $port;
+    rcv $port, test => sub {
+        my ($data) = @_;
+        $self->connection->irc_privmsg({
+            channel => '#aanoaa', # for test
+            message => $data
+        });
+    }
 };
 
 __PACKAGE__->meta->make_immutable;

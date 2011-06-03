@@ -38,9 +38,9 @@ has database => (
 
 has key_config => (
     is          => 'rw',
-    isa         => 'Str', 
+    isa         => 'Str',
     traits      => ['Getopt'],
-    default     => "$ENV{HOME}/.twitter_key", 
+    default     => "$ENV{HOME}/.twitter_key",
     cmd_aliases => 'k',
     documentation =>
       "twitter api key file. default using $ENV{HOME}/.twitter_key",
@@ -57,7 +57,7 @@ has track => (
 
 has key => (
     is          => 'rw',
-    isa         => 'HashRef', 
+    isa         => 'HashRef',
     traits        => ['NoGetopt'],
     lazy_build  => 1
 );
@@ -88,7 +88,7 @@ sub execute {
         token           => $access_token,
         token_secret    => $access_token_secret,
         method          => "filter",
-        track           => $self->track, 
+        track           => $self->track,
         on_tweet        => sub {
             my $tweet = shift;
 

@@ -46,7 +46,7 @@ has interval => (
     isa           => 'Int',
     traits        => ['Getopt'],
     default       => 300,
-    cmd_aliases   => 'i', 
+    cmd_aliases   => 'i',
     documentation => "polling interval time as seconds. default is 300 seconds",
 );
 

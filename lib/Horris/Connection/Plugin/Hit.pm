@@ -2,18 +2,18 @@ package Horris::Connection::Plugin::Hit;
 # ABSTRACT: Dis(디스) Plugin on Horris
 
 =head1 SYNOPSIS
- 
-	I don't know about origin of a word 'dis'
-	some day a3r0 said, hongbot: hit jeen
-	so i made this.
 
-	# assume here at a irc channel
-	HH:MM:SS    NICK | BOTNAME dis NICK
-	HH:MM:SS BOTNAME | NICK: #@!##$@!@#(random dis message, you can type dis message to configuration file)
+    I don't know about origin of a word 'dis'
+    some day a3r0 said, hongbot: hit jeen
+    so i made this.
 
-	# also you can send a dis message hide behind the BOT
-	HH:MM:SS    NICK | /msg BOTNAME dis NICK OH! SHIT!
-	HH:MM:SS BOTNAME | NICK: OH! SHIT!
+    # assume here at a irc channel
+    HH:MM:SS    NICK | BOTNAME dis NICK
+    HH:MM:SS BOTNAME | NICK: #@!##$@!@#(random dis message, you can type dis message to configuration file)
+
+    # also you can send a dis message hide behind the BOT
+    HH:MM:SS    NICK | /msg BOTNAME dis NICK OH! SHIT!
+    HH:MM:SS BOTNAME | NICK: OH! SHIT!
 
 =head1 DESCRIPTION
 
@@ -40,14 +40,14 @@ extends 'Horris::Connection::Plugin';
 with 'MooseX::Role::Pluggable::Plugin';
 
 has texts => (
-	is => 'ro', 
-	isa => 'ArrayRef', 
+    is => 'ro',
+    isa => 'ArrayRef',
 );
 
 sub irc_privmsg {
-	my ($self, $message) = @_;
-	my $msg = $message->message;
-	my $botname = $self->connection->nickname;
+    my ($self, $message) = @_;
+    my $msg = $message->message;
+    my $botname = $self->connection->nickname;
 
     my ($output, $nick, $typed);
     if (($nick, $typed) = $msg =~ m/^(\w+)\S*\s+껒$/i) {
@@ -64,7 +64,7 @@ sub irc_privmsg {
     }
 
     $self->connection->irc_privmsg({
-        channel => $message->channel, 
+        channel => $message->channel,
         message => $output
     });
 
@@ -72,22 +72,22 @@ sub irc_privmsg {
 }
 
 sub on_privatemsg {
-	my ($self, $nick, $message) = @_;
-	my $msg = $message->message;
-	if (my ($nick, $typed) = $msg =~ m/^[(:?dis|hit)]+\s+(\w+)\s*(.*)$/i) {
-		my $output = $nick . ': ';
-		$output .= $typed eq '' ? $self->texts->[int(rand(scalar @{ $self->texts }))] : $typed;
-		my %channel_list = %{ $self->connection->irc->channel_list };
-		for my $channel (keys %channel_list) {
-			if (grep { m/$nick/ } keys %{ $channel_list{$channel} }) {
-				$self->connection->irc_privmsg({
-					channel => $channel, 
-					message => $output
-				});
-			}
-		}
-	}
-	return $self->pass;
+    my ($self, $nick, $message) = @_;
+    my $msg = $message->message;
+    if (my ($nick, $typed) = $msg =~ m/^[(:?dis|hit)]+\s+(\w+)\s*(.*)$/i) {
+        my $output = $nick . ': ';
+        $output .= $typed eq '' ? $self->texts->[int(rand(scalar @{ $self->texts }))] : $typed;
+        my %channel_list = %{ $self->connection->irc->channel_list };
+        for my $channel (keys %channel_list) {
+            if (grep { m/$nick/ } keys %{ $channel_list{$channel} }) {
+                $self->connection->irc_privmsg({
+                    channel => $channel,
+                    message => $output
+                });
+            }
+        }
+    }
+    return $self->pass;
 }
 
 __PACKAGE__->meta->make_immutable;

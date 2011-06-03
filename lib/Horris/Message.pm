@@ -109,7 +109,7 @@ sub __check_parsed {
     if (! $self->__parsed) {
         my $ref = $self->str_ref;
 
-		$$ref =~ /^([^!]+)!([^@]+)@(.*)$/;
+        $$ref =~ /^([^!]+)!([^@]+)@(.*)$/;
         $self->set_modifier( '' );
         $self->set_nickname( $1 || '' );
         $self->set_username( $2 || '' );

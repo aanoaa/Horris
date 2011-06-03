@@ -3,9 +3,9 @@ package Horris::Connection::Plugin::Eng2kor;
 
 =head1 SYNOPSIS
 
-	# assume here at a irc channel
-	HH:MM:SS    NICK | eng2kor hello
-	HH:MM:SS BOTNAME | 안녕하세요
+    # assume here at a irc channel
+    HH:MM:SS    NICK | eng2kor hello
+    HH:MM:SS BOTNAME | 안녕하세요
 
 =head1 DESCRIPTION
 
@@ -25,26 +25,26 @@ extends 'Horris::Connection::Plugin';
 with 'MooseX::Role::Pluggable::Plugin';
 
 sub irc_privmsg {
-	my ($self, $message) = @_;
-	my @msg = $self->_eng2kor($message);
+    my ($self, $message) = @_;
+    my @msg = $self->_eng2kor($message);
 
-	return unless @msg;
+    return unless @msg;
 
     for (@msg) {
         $self->connection->irc_privmsg({
-            channel => $message->channel, 
+            channel => $message->channel,
             message => $_
         });
     }
 
-	return $self->pass;
+    return $self->pass;
 }
 
 sub _eng2kor {
-	my ($self, $message) = @_;
-	my $raw = $message->message;
+    my ($self, $message) = @_;
+    my $raw = $message->message;
 
-	unless ($raw =~ m/^eng2kor/i) {
+    unless ($raw =~ m/^eng2kor/i) {
         return undef;
     }
 

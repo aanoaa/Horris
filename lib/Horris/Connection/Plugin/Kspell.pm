@@ -3,9 +3,9 @@ package Horris::Connection::Plugin::Kspell;
 
 =head1 SYNOPSIS
 
-	# assume here at a irc channel
-	HH:MM:SS    NICK | kspell 키디님
-	HH:MM:SS BOTNAME | 키디님 -> 캐디님
+    # assume here at a irc channel
+    HH:MM:SS    NICK | kspell 키디님
+    HH:MM:SS BOTNAME | 키디님 -> 캐디님
 
 =head1 DESCRIPTION
 
@@ -24,26 +24,26 @@ extends 'Horris::Connection::Plugin';
 with 'MooseX::Role::Pluggable::Plugin';
 
 sub irc_privmsg {
-	my ($self, $message) = @_;
-	my @msg = $self->_kspell($message);
+    my ($self, $message) = @_;
+    my @msg = $self->_kspell($message);
 
-	return unless @msg;
+    return unless @msg;
 
     for (@msg) {
         $self->connection->irc_privmsg({
-            channel => $message->channel, 
+            channel => $message->channel,
             message => $_
         });
     }
 
-	return $self->pass;
+    return $self->pass;
 }
 
 sub _kspell {
-	my ($self, $message) = @_;
-	my $raw = $message->message;
+    my ($self, $message) = @_;
+    my $raw = $message->message;
 
-	unless ($raw =~ m/^kspell/i) {
+    unless ($raw =~ m/^kspell/i) {
         return undef;
     }
 
