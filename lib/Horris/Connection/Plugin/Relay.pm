@@ -109,7 +109,7 @@ sub irc_privmsg {
         my $server = $ports->[0];
         my $msg = sprintf('<%s> %s', $nickname, $message);
         if ($config->{encode} && $config->{decode}) {
-        $msg = Encode::encode($config->{encode}, Encode::decode($config->{decode}, $msg));
+            $msg = Encode::encode($config->{encode}, Encode::decode($config->{decode}, $msg));
         }
 
         snd $server, $config->{type} => $_, $msg for @{ $config->{to} };

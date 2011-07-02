@@ -149,8 +149,23 @@ sub run {
             message => $raw->{params}->[1],
             from    => defined $raw->{prefix} ? $raw->{prefix} : '',
         );
+
         $self->occur_event('on_privatemsg', $nick, $message);
     });
+
+    $irc->reg_cb(join => sub {
+        my ($nick, $channel, $is_myself) = @_;
+
+        return if $is_myself;
+
+        my $message = Horris::Message->new(
+            channel => $channel,
+            message => sprintf("%s has joined %s", $nick, $channel),
+        );
+
+        $self->occur_event('irc_privmsg', $message);
+    });
+
 
     $irc->connect($self->server, $self->port, {
         nick => $self->nickname,

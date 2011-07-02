@@ -15,7 +15,7 @@ class_type 'Horris::Message::Address';
 
 coerce 'Horris::Message::Address'
     => from 'Str'
-        => via { Horris::Message::Address->new($_) }
+    => via { Horris::Message::Address->new($_) }
 ;
 
 has from => (
