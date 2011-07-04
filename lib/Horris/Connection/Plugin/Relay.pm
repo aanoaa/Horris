@@ -116,6 +116,12 @@ sub irc_privmsg {
     }
 }
 
+sub join {
+    my ($self, $msg) = @_;
+
+    $self->irc_privmsg($msg);
+}
+
 __PACKAGE__->meta->make_immutable();
 
 1;

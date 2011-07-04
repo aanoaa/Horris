@@ -154,18 +154,18 @@ sub run {
     });
 
     $irc->reg_cb(join => sub {
-        my ($nick, $channel, $is_myself) = @_;
+        my ($con, $nick, $channel, $is_myself) = @_;
 
         return if $is_myself;
 
         my $message = Horris::Message->new(
             channel => $channel,
             message => sprintf("%s has joined %s", $nick, $channel),
+            from => '',
         );
 
-        $self->occur_event('irc_privmsg', $message);
+        $self->occur_event('join', $message);
     });
-
 
     $irc->connect($self->server, $self->port, {
         nick => $self->nickname,
