@@ -23,7 +23,8 @@ use List::MoreUtils qw/each_array/;
 extends 'Horris::Connection::Plugin';
 with 'MooseX::Role::Pluggable::Plugin';
 
-Readonly::Scalar my $ENTRY => q{yongbin,keedi,aanoaa,jeen,mintegrals,"Zeus 7000","SyncMaster CX919B by am0c","SyncMaster 179N","SyncMaster 20","Antique Desk"};
+Readonly::Scalar my $ENTRY =>
+q{yongbin,aanoaa,keedi,jeen,mintegrals,rumidier,"Black Hole - rumidier-X-star 19","White Hole - SyncMaster 179N","Zeus 7000-Middle","Zeus 7000-Outsider","SyncMaster CX919B by am0c","SyncMaster 205BW"};
 
 has _entry => (
     is      => 'rw',
@@ -79,8 +80,26 @@ sub irc_privmsg {
             break unless $pair_a;
             break unless $pair_b;
 
+            my @Hole_a;
+            my @Hole_b;
+            for (0 .. 1) {
+                $Hole_a[$_] = shift @$pair_a;
+                $Hole_b[$_] = shift @$pair_b;
+            }
+##
+#
+# Hole_a, Hole_b에 yongbin,aanoaa | Black-hole, White-hole 을 강제로 매치
+# 나머지 리스트 값은 기존과 같은 shuffle 
+#                           - rumidier -
+##
+
             my @result_a = shuffle @$pair_a;
             my @result_b = shuffle @$pair_b;
+
+            for (0 .. 1) {
+                $result_a[$#result_a + 1] = shift @Hole_a;
+                $result_b[$#result_b + 1] = shift @Hole_b;
+            }
 
             my $ea = each_array( @result_a, @result_b );
             while ( my ( $a, $b ) = $ea->() ) {
